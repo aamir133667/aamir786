@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aamir Abbas — Web Developer, Programmer, AI Explorer</title>
+<meta name="description" content="Portfolio of Aamir Abbas: BCA student, web developer, programmer and AI explorer.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loader" aria-hidden="true"><span></span></div>
+<header id="top-bar"><nav id="nav" aria-label="Main">
+  <a class="logo" href="#home">Aamir Abbas</a>
+  <button id="menu-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#skills">Skills</a></li><li><a href="#projects">Projects</a></li><li><a href="#journey">Journey</a></li><li><a href="#languages">Languages</a></li><li><a href="#ai">AI</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#contact">Contact</a></li></ul>
+</nav></header>
+<main>
+<section id="home" data-page="home" class="hero"><canvas id="particles" aria-hidden="true"></canvas>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="status"><i></i> Available for Projects &amp; Learning</p>
+      <h1>Hi, I'm Aamir Abbas</h1>
+      <p class="typed-line"><span id="typed"></span><b class="caret"></b></p>
+      <p class="lead">I build digital experiences, experiment with AI, learn languages and continuously improve my programming skills.</p>
+      <p class="tagline">Building with Code. Learning Languages. Exploring AI.</p>
+      <div class="btns"><a class="btn" href="#journey">Explore My Journey</a><a class="btn ghost" href="#projects">View Projects</a><a class="btn ghost" href="#ai">Talk to My AI</a></div>
+    </div>
+    <div class="photo float"><img src="profile.jpg" alt="Portrait of Aamir Abbas" width="480" height="480"></div>
+  </div>
+</section>
+<div class="marquee" data-page="home"><div class="track" id="marquee-a"></div></div>
+<div class="marquee rev" data-page="home"><div class="track" id="marquee-b"></div></div>
+
+<section id="about" data-page="about" class="sec"><div class="wrap">
+  <h2>About Me</h2><p class="sub">A little about who I am</p>
+  <div class="two">
+    <div class="photo sm"><img src="profile.jpg" alt="Aamir Abbas" loading="lazy"></div>
+    <div class="prose">
+      <p>Hello, I'm Aamir Abbas. I am currently pursuing BCA and developing my skills in programming, web development and artificial intelligence.</p>
+      <p>I started exploring programming because I wanted to understand how digital products actually work. Since then, I have been learning web technologies, Python, C++, AI tools and application development.</p>
+      <p>Alongside programming, I am also interested in learning languages such as French and German.</p>
+      <p>My long-term goal is to combine software development, artificial intelligence and robotics to build useful technology.</p>
+      <ul class="cards" id="about-cards"></ul>
+    </div>
+  </div>
+  <div class="stats" id="stats"></div>
+</div></section>
+
+<section id="skills" data-page="skills" class="sec alt"><div class="wrap">
+  <h2>My Skills</h2><p class="sub">Technologies I'm learning and using</p>
+  <p class="muted">Bars are visual learning indicators, not certification scores.</p>
+  <div class="grid skills" id="skill-grid"></div>
+</div></section>
+
+<section id="projects" data-page="projects" class="sec"><div class="wrap">
+  <h2>Featured Projects</h2><p class="sub">Things I have built and experimented with</p>
+  <div class="grid projects" id="project-grid"></div>
+</div></section>
+
+<section id="journey" data-page="journey" class="sec alt"><div class="wrap narrow">
+  <h2>My Learning Journey</h2><ol class="timeline" id="timeline"></ol>
+</div></section>
+
+<section id="languages" data-page="languages" class="sec"><div class="wrap">
+  <h2>Languages</h2><div class="grid four" id="lang-grid"></div>
+</div></section>
+
+<section class="sec learn" data-page="journey"><div class="wrap"><h2>Currently Learning</h2></div>
+  <div class="marquee slow"><div class="track" id="learn-track"></div></div>
+</section>
+
+<section id="goals" data-page="journey" class="sec goals"><div class="wrap">
+  <h2>Where I'm Going</h2>
+  <p class="sub">My goal is to keep learning, build useful products and explore the intersection of software, artificial intelligence and robotics.</p>
+  <div class="grid five" id="goal-grid"></div>
+</div></section>
+
+<section id="ai" data-page="ai" class="sec alt"><div class="wrap narrow">
+  <h2>Ask Aamir's AI</h2><p class="sub">Ask questions about my projects, skills and learning journey.</p>
+  <div class="chat card">
+    <div id="chat-log" class="log" aria-live="polite"></div>
+    <div id="chat-suggest" class="suggest"></div>
+    <form id="chat-form"><input id="chat-input" placeholder="Ask something about Aamir..." aria-label="Your question" autocomplete="off"><button class="btn" type="submit">Ask AI</button></form>
+  </div>
+</div></section>
+
+<section id="gallery" data-page="gallery" class="sec"><div class="wrap">
+  <h2>My Gallery</h2><div class="gallery" id="gallery-grid"></div>
+</div></section>
+
+<section id="resume" data-page="gallery" class="sec alt"><div class="wrap narrow center">
+  <h2>Resume</h2><p class="sub">Explore my education, skills, projects and technical interests.</p>
+  <div class="btns c"><a class="btn" id="resume-view" href="resume.html">View Resume</a><a class="btn ghost" id="resume-dl" href="Aamir-Abbas-Resume.pdf" download="Aamir-Abbas-Resume.pdf">Download Resume</a></div>
+</div></section>
+
+<section id="links" data-page="contact" class="sec"><div class="wrap">
+  <h2>Find Me Online</h2><div class="grid six" id="link-grid"></div>
+</div></section>
+
+<section id="contact" data-page="contact" class="sec alt"><div class="wrap narrow">
+  <h2>Let's Build Something</h2><p class="sub">Have an idea, project or collaboration in mind?</p>
+  <form id="contact-form" class="card form">
+    <label>Name<input name="name" required></label>
+    <label>Email<input name="email" type="email" required></label>
+    <label>Message<textarea name="message" rows="5" required></textarea></label>
+    <button class="btn" type="submit">Send Message</button>
+    <p id="form-note" class="muted" role="status"></p>
+  </form>
+</div></section>
+</main>
+
+<footer><div class="wrap foot">
+  <div><strong>Aamir Abbas</strong><p>Building with Code. Learning Languages. Exploring AI.</p></div>
+  <div id="footer-links" class="flinks"></div>
+  <p>© 2026 Aamir Abbas. All rights reserved.</p>
+</div></footer>
+<a id="top" href="#home" aria-label="Back to Top">↑ Back to Top</a>
+
+<div id="modal" class="overlay" hidden><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button id="modal-close" aria-label="Close">×</button><div id="modal-body"></div></div></div>
+<div id="lightbox" class="overlay" hidden><img id="lightbox-img" alt="Enlarged gallery photo"></div>
+<script src="script.js"></script>
+</body></html>
