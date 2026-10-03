@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Machine | Your Intelligent Digital Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#050914;--ink:#e8f0ff;--mut:#8fa3c7;--cy:#35e6ff;--vi:#8a6bff;--line:rgba(120,170,255,.18);--glass:rgba(12,20,42,.58);
+--b1:#35e6ff;--b2:#8a6bff;--hf:'Sora','Segoe UI',system-ui,sans-serif;--bf:'Manrope','Segoe UI',system-ui,sans-serif}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--bf);overflow-x:hidden;min-height:100vh}
+body.snow{--b1:#8fdcff;--b2:#3b5bff}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+/* background layers */
+#bg,.grid,.blob,#light{position:fixed;inset:0;pointer-events:none;z-index:0}
+.grid{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;
+-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%);transition:opacity .8s}
+body.snow .grid{opacity:.25}
+.blob{inset:auto;width:60vmax;height:60vmax;border-radius:50%;filter:blur(90px);opacity:.28;transition:background .8s}
+.blob.a{background:var(--b1);top:-25vmax;left:-15vmax;animation:drift 18s ease-in-out infinite alternate}
+.blob.b{background:var(--b2);bottom:-28vmax;right:-18vmax;animation:drift 22s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(12vmax,8vmax) scale(1.15)}}
+#light{background:radial-gradient(420px circle at var(--mx,50%) var(--my,30%),rgba(53,230,255,.13),transparent 65%)}
+body.snow #light{opacity:.5}
+/* nav */
+.nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px clamp(16px,4vw,40px);
+background:rgba(5,9,20,.55);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:800 1.15rem var(--hf);background:none;border:0;padding:0}
+.brand svg{width:34px;height:34px}
+.nav nav{display:flex;align-items:center;gap:6px}
+.nav a,.nav .lk{color:var(--mut);text-decoration:none;padding:8px 12px;border-radius:10px;background:none;border:0;font-weight:600}
+.nav a:hover,.nav .lk:hover{color:var(--ink);background:rgba(120,170,255,.1)}
+body.snow .nav{background:transparent;border-color:transparent;backdrop-filter:none}
+body.snow .nav nav{display:none}
+.logo{filter:drop-shadow(0 0 10px rgba(53,230,255,.75));animation:pulse 3.2s ease-in-out infinite}
+@keyframes pulse{50%{filter:drop-shadow(0 0 22px rgba(138,107,255,.95));transform:scale(1.05)}}
+/* views */
+.view{display:none;position:relative;z-index:2}
+.view.on{display:block;animation:vin .55s ease both}
+.view.out{display:block;animation:vout .28s ease both}
+@keyframes vin{from{opacity:0;transform:translateY(14px) scale(.985)}}
+@keyframes vout{to{opacity:0;transform:translateY(-8px) scale(1.01)}}
+/* buttons */
+.btn{position:relative;border:1px solid var(--line);background:rgba(120,170,255,.08);padding:12px 24px;border-radius:14px;font-weight:700;transition:.25s}
+.btn:hover{transform:translateY(-2px);border-color:var(--cy);box-shadow:0 0 22px rgba(53,230,255,.3)}
+.pri{background:linear-gradient(120deg,var(--cy),var(--vi));color:#04101f;border:0}
+.pri:hover{box-shadow:0 0 30px rgba(53,230,255,.6),0 0 60px rgba(138,107,255,.3)}
+.btn.ld{pointer-events:none;color:transparent!important}
+.btn.ld::after{content:"";position:absolute;inset:0;margin:auto;width:20px;height:20px;border:3px solid rgba(4,16,31,.3);border-top-color:#04101f;border-radius:50%;animation:spin .7s linear infinite}
+.btn.okb{background:linear-gradient(120deg,#2ee6a6,#35e6ff);color:#04101f;border:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* hero */
+.hero{min-height:calc(100vh - 62px);display:grid;place-content:center;justify-items:center;text-align:center;padding:40px 20px 60px}
+.hero .logo{width:clamp(96px,22vw,140px);height:auto;margin-bottom:18px}
+h1{font:800 clamp(2.6rem,9vw,5.2rem)/1.05 var(--hf);margin:0;letter-spacing:-.02em;background:linear-gradient(120deg,#fff 10%,var(--cy) 55%,var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font:700 clamp(1.1rem,3.2vw,1.6rem) var(--hf);margin:14px 0 8px}
+.hero p{color:var(--mut);max-width:34rem;margin:0 0 28px}
+.row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+/* features */
+.sec{padding:40px clamp(16px,4vw,40px) 70px;max-width:1100px;margin:auto}
+h2{font:800 clamp(1.6rem,4vw,2.3rem) var(--hf);text-align:center;margin:0 0 28px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.card{position:relative;text-align:left;padding:24px;border-radius:18px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(10px);transition:.3s}
+.card:hover{transform:translateY(-6px);border-color:var(--cy);box-shadow:0 12px 40px rgba(53,230,255,.18)}
+.card .ic{font-size:2rem;display:block;margin-bottom:8px;animation:bob 4s ease-in-out infinite}
+.card h3{font:700 1.15rem var(--hf);margin:0 0 4px}
+.card p{margin:0;color:var(--mut);font-size:.95rem}
+.card .tag{position:absolute;top:14px;right:14px;font-size:.72rem;color:var(--cy);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+.note{color:var(--mut);font-size:.85rem;text-align:center;padding:0 16px 30px}
+/* chat */
+.chat{display:flex;flex-direction:column;max-width:820px;height:min(740px,calc(100dvh - 90px));margin:14px auto;padding:0 14px}
+.ch{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px 16px 0 0;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px)}
+.ch h3{margin:0;font:700 1.05rem var(--hf);flex:1}
+.badge{font:700 .7rem var(--hf);letter-spacing:.06em;color:#ffcf5c;border:1px solid rgba(255,207,92,.5);border-radius:99px;padding:3px 10px;animation:blink 2.4s infinite}
+@keyframes blink{50%{box-shadow:0 0 14px rgba(255,207,92,.45)}}
+.log{flex:1;overflow-y:auto;padding:16px;background:rgba(8,14,30,.6);border:1px solid var(--line);border-top:0;border-bottom:0;display:flex;flex-direction:column;gap:12px}
+.m{max-width:82%;padding:11px 15px;border-radius:16px;white-space:pre-wrap;animation:vin .35s ease both}
+.m.ai{background:rgba(53,230,255,.09);border:1px solid rgba(53,230,255,.25);border-bottom-left-radius:4px}
+.m.me{align-self:flex-end;background:linear-gradient(120deg,var(--cy),var(--vi));color:#04101f;font-weight:600;border-bottom-right-radius:4px}
+.m small{display:block;margin-top:6px;font:700 .65rem var(--hf);letter-spacing:.06em;color:#ffcf5c}
+.dots span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:var(--cy);animation:bob 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;background:rgba(8,14,30,.6);border:1px solid var(--line);border-top:0;border-bottom:0}
+.chip{border:1px solid var(--line);background:none;border-radius:99px;padding:5px 13px;font-size:.85rem;color:var(--mut)}
+.chip:hover{color:var(--ink);border-color:var(--cy)}
+.cin{display:flex;gap:8px;padding:12px;border-radius:0 0 16px 16px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px)}
+.cin input[type=text]{flex:1;min-width:0;background:rgba(5,9,20,.7);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.cin input:focus{border-color:var(--cy);outline:0;box-shadow:0 0 14px rgba(53,230,255,.25)}
+.ib{background:rgba(120,170,255,.1);border:1px solid var(--line);border-radius:12px;padding:0 13px;font-size:1.1rem}
+.ib.rec{border-color:#ff5c7a;animation:blink 1s infinite}
+.cin .pri{padding:0 20px}
+/* auth */
+.auth{min-height:calc(100vh - 62px);display:grid;place-items:center;padding:24px 16px}
+.glass{width:min(430px,100%);padding:clamp(24px,5vw,38px);border-radius:24px;background:rgba(10,18,40,.55);border:1px solid rgba(160,210,255,.25);
+backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 0 40px rgba(143,220,255,.05);text-align:center}
+.glass .logo{width:84px;height:84px}
+.glass h3{font:800 1.5rem var(--hf);margin:10px 0 0}
+.tg{color:var(--cy);font-size:.85rem;letter-spacing:.06em;margin:2px 0 18px}
+.glass h4{font:700 1.3rem var(--hf);margin:0}
+.glass .mut{color:var(--mut);margin:4px 0 18px;font-size:.95rem}
+.panel{display:none}.panel.on{display:block;animation:vin .45s ease both}
+.f{position:relative;margin-bottom:12px;text-align:left}
+.f input{width:100%;background:rgba(5,9,20,.65);border:1px solid var(--line);border-radius:12px;padding:13px 14px}
+.f input:focus{border-color:var(--cy);outline:0;box-shadow:0 0 16px rgba(53,230,255,.25)}
+.f .eye{position:absolute;right:6px;top:6px;bottom:6px;background:none;border:0;padding:0 10px}
+.opt{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;margin:4px 0 16px;color:var(--mut)}
+.opt a,.sw a{color:var(--cy);text-decoration:none;font-weight:600}
+.opt a:hover,.sw a:hover{text-decoration:underline}
+.glass .btn.w{width:100%}
+.err{color:#ff7a93;font-size:.85rem;min-height:1.2em;margin:8px 0 0}
+.or{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:.75rem;letter-spacing:.1em;margin:20px 0 14px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.soc{display:grid;gap:10px}
+.soc .btn{display:flex;align-items:center;justify-content:center;gap:10px}
+.soc b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#4285f4;font:800 .9rem var(--hf)}
+.soc .fb b{background:#1877f2;color:#fff}
+.sw{margin:18px 0 0;color:var(--mut);font-size:.92rem}
+.demo{margin-top:16px;padding:9px 12px;font-size:.78rem;color:#ffcf5c;border:1px dashed rgba(255,207,92,.45);border-radius:10px}
+.shake{animation:shk .4s}
+@keyframes shk{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+/* dashboard */
+.dash{max-width:1100px;margin:auto;padding:44px clamp(16px,4vw,40px) 60px}
+.dash h2{text-align:left;margin-bottom:6px}
+.dash .mut{color:var(--mut);margin:0 0 28px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;z-index:50;background:rgba(12,20,42,.92);border:1px solid var(--cy);padding:10px 20px;border-radius:99px;transition:.35s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:560px){.nav .lk.hm{display:none}.m{max-width:92%}.cin .pri{padding:0 14px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#35e6ff"/><stop offset="1" stop-color="#8a6bff"/></linearGradient></defs><path d="M32 4 56 18v28L32 60 8 46V18z" fill="none" stroke="url(#g)" stroke-width="3"/><path d="M32 26V14M37 35l10 6M27 35l-10 6" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="32" r="6" fill="url(#g)"/><circle cx="32" cy="13" r="3" fill="#35e6ff"/><circle cx="48" cy="42" r="3" fill="#8a6bff"/><circle cx="16" cy="42" r="3" fill="#8a6bff"/></symbol></svg>
+
+<div class="grid"></div><div class="blob a"></div><div class="blob b"></div><div id="light"></div><canvas id="bg"></canvas>
+
+<header class="nav">
+  <button class="brand" data-go="home" aria-label="AI Machine home"><svg class="logo"><use href="#lg"/></svg>AI Machine</button>
+  <nav>
+    <button class="lk hm" data-go="home">Home</button>
+    <a href="#features" id="nf">Features</a>
+    <button class="lk" data-go="chat">Demo</button>
+    <button class="btn pri" id="navAuth" style="padding:8px 18px">Login</button>
+  </nav>
+</header>
+
+<main>
+<!-- HOME -->
+<section class="view on" id="v-home">
+  <div class="hero">
+    <svg class="logo"><use href="#lg"/></svg>
+    <h1>AI Machine</h1>
+    <div class="sub">Your Intelligent Digital Assistant</div>
+    <p>Explore the future of AI through an interactive demonstration.</p>
+    <div class="row"><button class="btn pri" data-tool="chat">Try AI Demo</button><button class="btn" data-go="login">Get Started</button></div>
+  </div>
+  <div class="sec" id="features"><h2>AI Features</h2><div class="cards" id="featCards"></div></div>
+</section>
+
+<!-- CHAT -->
+<section class="view" id="v-chat">
+  <div class="chat">
+    <div class="ch"><button class="btn" data-go="back" style="padding:6px 12px" aria-label="Back">←</button><h3 id="ct">AI Chat</h3><span class="badge">DEMO MODE</span></div>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="chips" id="chips"></div>
+    <form class="cin" id="cf">
+      <button type="button" class="ib" id="att" aria-label="Attach">📎</button>
+      <input type="file" id="file" hidden>
+      <input type="text" id="ci" placeholder="Ask me anything..." autocomplete="off">
+      <button type="button" class="ib" id="mic" aria-label="Voice">🎤</button>
+      <button class="btn pri" type="submit">Send</button>
+    </form>
+  </div>
+</section>
+
+<!-- AUTH -->
+<section class="view" id="v-auth">
+  <div class="auth"><div class="glass">
+    <svg class="logo"><use href="#lg"/></svg>
+    <h3>AI Machine</h3><div class="tg">Intelligence. Creativity. Possibility.</div>
+
+    <div class="panel on" id="p-login">
+      <h4>Welcome Back</h4><p class="mut">Sign in to continue your AI journey.</p>
+      <form id="lf" novalidate>
+        <div class="f"><input type="email" id="le" placeholder="Enter your email" autocomplete="email" aria-label="Email"></div>
+        <div class="f"><input type="password" id="lp" placeholder="Enter your password" autocomplete="current-password" aria-label="Password"><button type="button" class="eye" aria-label="Show or hide password">👁</button></div>
+        <div class="opt"><label><input type="checkbox"> Remember me</label><a href="#" data-p="forgot">Forgot Password?</a></div>
+        <button class="btn pri w" type="submit">Sign In</button>
+        <p class="err" id="le-err"></p>
+      </form>
+      <div class="or">OR CONTINUE WITH</div>
+      <div class="soc"><button class="btn" data-soc="Google"><b>G</b>Continue with Google</button><button class="btn fb" data-soc="Facebook"><b>f</b>Continue with Facebook</button></div>
+      <p class="sw">Don't have an account? <a href="#" data-p="signup">Create Account</a></p>
+    </div>
+
+    <div class="panel" id="p-signup">
+      <h4>Create Account</h4><p class="mut">Join AI Machine in a few seconds.</p>
+      <form id="sf" novalidate>
+        <div class="f"><input type="text" id="sn" placeholder="Enter your name" autocomplete="name" aria-label="Name"></div>
+        <div class="f"><input type="email" id="se" placeholder="Enter your email" autocomplete="email" aria-label="Email"></div>
+        <div class="f"><input type="password" id="sp" placeholder="Create a password" autocomplete="new-password" aria-label="Password"><button type="button" class="eye" aria-label="Show or hide password">👁</button></div>
+        <button class="btn pri w" type="submit">Create Account</button>
+        <p class="err" id="se-err"></p>
+      </form>
+      <p class="sw">Already have an account? <a href="#" data-p="login">Sign In</a></p>
+    </div>
+
+    <div class="panel" id="p-forgot">
+      <h4>Forgot Password?</h4><p class="mut">Enter your email and we'll show a demo recovery.</p>
+      <form id="ff" novalidate>
+        <div class="f"><input type="email" id="fe" placeholder="Enter your email" aria-label="Email"></div>
+        <button class="btn pri w" type="submit">Send Recovery Link</button>
+        <p class="err" id="fe-err"></p>
+      </form>
+      <p class="sw"><a href="#" data-p="login">← Back to Sign In</a></p>
+    </div>
+
+    <div class="demo">Demo Mode — Authentication is simulated for this frontend demonstration.</div>
+  </div></div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="view" id="v-dash">
+  <div class="dash">
+    <h2>Welcome back, <span id="un">Aamir</span>!</h2>
+    <p class="mut">Pick a tool to start. Everything here is a demo with predefined replies.</p>
+    <div class="cards" id="dashCards"></div>
+    <div class="row" style="margin-top:34px"><button class="btn" id="logout">Logout</button></div>
+  </div>
+</section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=id=>document.getElementById(id),Q=s=>document.querySelector(s),QA=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ---------- background: particles + neural net / snow ---------- */
+const cv=$('bg'),cx=cv.getContext('2d');let W,H,mode='ai',P=[],S=[],mx=-999,my=-999;
+const flake=init=>{const r=Math.random()*3+1;return{x:Math.random()*W,y:init?Math.random()*H:-10,r,v:r*.3+Math.random()*.7,a:Math.random()*6.28,s:Math.random()*.02+.006,w:Math.random()*.9+.3}};
+function size(){const d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+P=Array.from({length:Math.min(75,W/16|0)},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.45,vy:(Math.random()-.5)*.45,r:Math.random()*1.8+.9}));
+S=Array.from({length:Math.min(170,W/6|0)},()=>flake(true))}
+addEventListener('resize',size);size();
+function tick(){const k=RM?0:1;cx.clearRect(0,0,W,H);
+if(mode==='ai'){
+ for(let i=0;i<P.length;i++){const p=P[i];p.x+=p.vx*k;p.y+=p.vy*k;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+  for(let j=i+1;j<P.length;j++){const q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);if(d<130){cx.strokeStyle=`rgba(53,230,255,${.22*(1-d/130)})`;cx.lineWidth=1;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y);cx.stroke()}}
+  const dm=Math.hypot(p.x-mx,p.y-my);if(dm<170){cx.strokeStyle=`rgba(138,107,255,${.5*(1-dm/170)})`;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(mx,my);cx.stroke()}
+  cx.fillStyle='#7ff0ff';cx.shadowColor='#35e6ff';cx.shadowBlur=10;cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.28);cx.fill();cx.shadowBlur=0}
+}else{
+ for(const f of S){f.a+=f.s*k;f.y+=f.v*k;f.x+=Math.sin(f.a)*f.w*k;if(f.y>H+10){Object.assign(f,flake(false))}if(f.x>W+10)f.x=-10;if(f.x<-10)f.x=W+10;
+  cx.fillStyle=`rgba(235,246,255,${.35+f.r*.15})`;cx.shadowColor='#bfe6ff';cx.shadowBlur=f.r*2;cx.beginPath();cx.arc(f.x,f.y,f.r,0,6.28);cx.fill()}cx.shadowBlur=0}
+requestAnimationFrame(tick)}
+tick();
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;const s=document.documentElement.style;s.setProperty('--mx',mx+'px');s.setProperty('--my',my+'px')});
+
+/* ---------- data ---------- */
+const FEAT=[['chat','💬','AI Chat','Interactive AI conversation experience.'],['code','💻','Coding','AI-powered programming assistance.'],['lang','🌐','Languages','Practice languages with an AI tutor.'],['study','📚','Study','Get help understanding academic topics.'],['creative','✨','Creative','Generate ideas and creative content.'],['voice','🤖','Assistant','Explore an intelligent digital assistant experience.']];
+const DASH=[['chat','💬','AI Chat'],['code','💻','Coding Assistant'],['lang','🌐','Language Tutor'],['study','📚','Study Assistant'],['creative','✨','Creative AI'],['voice','🎤','Voice Assistant']];
+const TOOLS={
+chat:['AI Chat',"Hello! 👋 I'm AI Machine.\n\nHow can I help you today?",['Hello','What can you do?','Tell me about coding']],
+code:['Coding Assistant',"Hi! 💻 Coding assistant demo here. Ask me about Python, JavaScript or loops.",['Show a Python example','Explain a loop']],
+lang:['Language Tutor',"Bonjour! 🌐 Language tutor demo here. Ask for a French or German phrase.",['Teach me French','Teach me German']],
+study:['Study Assistant',"Hello! 📚 Study assistant demo here. Ask me to explain a topic.",['Explain photosynthesis','Help me study']],
+creative:['Creative AI',"Hey! ✨ Creative demo here. Ask for an idea, a story or a poem.",['Give me a project idea','Write a short poem']],
+voice:['Voice Assistant',"Hi! 🎤 Tap the mic and I'll pretend to listen (demo).",['What can you do?']]};
+const REPLIES=[
+[/^\s*(hi|hello|hey|namaste)\b/i,"Hello! 👋 Welcome to AI Machine."],
+[/what can you do|help me|features/i,"I can demonstrate AI chat, coding assistance, language learning, study support, and creative tools."],
+[/loop/i,"A loop repeats code. In Python:\nfor i in range(3):\n    print(i)"],
+[/code|python|javascript|program/i,"Coding demo 💻\nprint('Hello, AI Machine!')\nA real version would explain, fix and improve your code."],
+[/french|bonjour/i,"Language demo 🌐\n“Bonjour” = Hello\n“Comment ça va ?” = How are you?"],
+[/german|hallo/i,"Language demo 🌐\n“Guten Morgen” = Good morning\n“Wie geht's?” = How are you?"],
+[/photosynth|study|explain|math/i,"Study demo 📚\nPhotosynthesis is how plants turn sunlight, water and CO₂ into sugar and oxygen."],
+[/idea|project/i,"Creative demo ✨\nIdea: a pocket study buddy that turns your notes into quick quizzes."],
+[/poem|story/i,"Creative demo ✨\nStars hum softly in the code,\nwhile small ideas learn to glow."],
+[/who are you|your name/i,"I'm AI Machine, a demo assistant with predefined replies."],
+[/thank/i,"You're welcome! 😊"]];
+const FALLBACK="This is a frontend-only demo, so I answer from predefined replies. Try: Hello, What can you do?, or ask about coding, languages, study or creative ideas.";
+
+/* ---------- router ---------- */
+let user=null,cur='home',prev='home',tool='chat';
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
+function go(v,panel){
+ if(v==='back'){v=prev==='chat'||prev==='auth'?(user?'dash':'home'):prev}
+ if(v==='login'||v==='signup'){panel=v==='signup'?'signup':'login';v='auth'}
+ if(v==='dash'&&!user){toast('Please sign in first');v='auth';panel='login'}
+ const a=$('v-'+cur),b=$('v-'+v);
+ if(cur!==v){prev=cur;a.classList.add('out');setTimeout(()=>{a.classList.remove('on','out');b.classList.add('on');scrollTo(0,0)},280)}
+ cur=v;mode=v==='auth'?'snow':'ai';document.body.classList.toggle('snow',v==='auth');
+ if(panel)showPanel(panel);
+ const na=$('navAuth');na.textContent=user?'Logout':'Login';
+}
+function showPanel(p){QA('.panel').forEach(x=>x.classList.toggle('on',x.id==='p-'+p));QA('.err').forEach(e=>e.textContent='');
+ QA('.glass .btn.pri, .soc .btn').forEach(b=>{b.classList.remove('ld','okb');b.disabled=false;if(b.dataset.t)b.innerHTML=b.dataset.t})}
+function openTool(k){
+ if(k!=='chat'&&!user){toast('This feature needs sign-in (demo)');go('login');return}
+ tool=k;const t=TOOLS[k];$('ct').textContent=t[0];$('log').innerHTML='';
+ ai(t[1],k!=='chat');
+ $('chips').innerHTML=t[2].map(x=>`<button class="chip" type="button">${x}</button>`).join('');
+ go('chat');
+}
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}
+ const t=e.target.closest('[data-tool]');if(t){openTool(t.dataset.tool);return}
+ const p=e.target.closest('[data-p]');if(p){e.preventDefault();showPanel(p.dataset.p);return}
+ const s=e.target.closest('[data-soc]');if(s){fake(s,'Demo Login Successful',()=>login('Aamir'));return}
+ const c=e.target.closest('.chip');if(c){send(c.textContent)}
+ const ey=e.target.closest('.eye');if(ey){const i=ey.previousElementSibling;i.type=i.type==='password'?'text':'password';ey.textContent=i.type==='password'?'👁':'🙈'}
+});
+$('navAuth').onclick=()=>user?logout():go('login');
+$('nf').onclick=e=>{if(cur!=='home'){e.preventDefault();go('home');setTimeout(()=>$('features').scrollIntoView({behavior:'smooth'}),450)}};
+$('logout').onclick=logout;
+function logout(){user=null;toast('Logged out (demo)');go('home')}
+function login(n){user=n;$('un').textContent=n;toast('Demo login successful');go('dash')}
+
+/* ---------- fake auth ---------- */
+function fake(btn,okText,done){btn.dataset.t=btn.dataset.t||btn.innerHTML;btn.classList.add('ld');
+ setTimeout(()=>{btn.classList.remove('ld');btn.classList.add('okb');btn.innerHTML='✓ '+okText;setTimeout(done,900)},1300)}
+const mail=v=>/^\S+@\S+\.\S+$/.test(v);
+function bad(id,msg){const e=$(id);e.textContent=msg;const g=e.closest('.glass');g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake')}
+$('lf').onsubmit=e=>{e.preventDefault();
+ if(!mail($('le').value.trim()))return bad('le-err','Enter any email, for example you@example.com (demo).');
+ if(!$('lp').value)return bad('le-err','Enter any password (demo).');
+ $('le-err').textContent='';fake(e.submitter||e.target.querySelector('.pri'),'Demo Login Successful',()=>login('Aamir'))};
+$('sf').onsubmit=e=>{e.preventDefault();const n=$('sn').value.trim();
+ if(!n)return bad('se-err','Enter your name.');
+ if(!mail($('se').value.trim()))return bad('se-err','Enter a valid email (demo).');
+ if(!$('sp').value)return bad('se-err','Create any password (demo).');
+ $('se-err').textContent='';fake(e.target.querySelector('.pri'),'Demo Account Created',()=>login(n.split(' ')[0]))};
+$('ff').onsubmit=e=>{e.preventDefault();
+ if(!mail($('fe').value.trim()))return bad('fe-err','Enter your email.');
+ const b=e.target.querySelector('.pri');fake(b,'Demo recovery link simulated',()=>{toast('Demo: no email is actually sent');showPanel('login')})};
+
+/* ---------- chat ---------- */
+const log=$('log');
+function ai(t,demo){const d=document.createElement('div');d.className='m ai';d.textContent=t;if(demo){const s=document.createElement('small');s.textContent='DEMO MODE';d.appendChild(s)}log.appendChild(d);log.scrollTop=log.scrollHeight}
+function me(t){const d=document.createElement('div');d.className='m me';d.textContent=t;log.appendChild(d);log.scrollTop=log.scrollHeight}
+function send(t){t=t.trim();if(!t)return;me(t);$('ci').value='';
+ const d=document.createElement('div');d.className='m ai dots';d.innerHTML='<span></span><span></span><span></span>';log.appendChild(d);log.scrollTop=log.scrollHeight;
+ setTimeout(()=>{d.remove();const r=REPLIES.find(x=>x[0].test(t));ai(r?r[1]:FALLBACK,!r)},700+Math.random()*500)}
+$('cf').onsubmit=e=>{e.preventDefault();send($('ci').value)};
+$('att').onclick=()=>$('file').click();
+$('file').onchange=e=>{const f=e.target.files[0];if(f){me('📎 '+f.name);setTimeout(()=>ai('Got your file. This is a demo, so nothing is uploaded or read.',true),600)}e.target.value=''};
+$('mic').onclick=()=>{const m=$('mic');if(m.classList.contains('rec'))return;m.classList.add('rec');$('ci').placeholder='Listening... (demo)';
+ setTimeout(()=>{m.classList.remove('rec');$('ci').placeholder='Ask me anything...';send('What can you do?')},1800)};
+
+/* ---------- build cards ---------- */
+$('featCards').innerHTML=FEAT.map((f,i)=>`<button class="card rv" style="transition-delay:${i*70}ms" data-tool="${f[0]}"><span class="tag">${f[0]==='chat'?'Demo':'🔒 Sign in'}</span><span class="ic">${f[1]}</span><h3>${f[2]}</h3><p>${f[3]}</p></button>`).join('');
+$('dashCards').innerHTML=DASH.map((f,i)=>`<button class="card rv" style="transition-delay:${i*70}ms" data-tool="${f[0]}"><span class="ic">${f[1]}</span><h3>${f[2]}</h3><p>Open demo</p></button>`).join('');
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.15});
+QA('.rv').forEach(x=>io.observe(x));
+new MutationObserver(()=>QA('.rv').forEach(x=>io.observe(x))).observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+</script>
+</body>
+</html>
