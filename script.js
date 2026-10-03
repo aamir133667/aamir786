@@ -41,7 +41,7 @@ window.PROFILE = {
   const P = PROFILE, $ = id => document.getElementById(id);
   const mq = a => [...a, ...a].map(t => `<span>${t}</span><i>✦</i>`).join("");
   $("marquee-a").innerHTML = mq(P.marquee); $("marquee-b").innerHTML = mq([...P.marquee].reverse());
-  const pg = {"BCA Student":"bca.html","Web Developer":"web.html","Python Programmer":"py.html","Language Learner":"Lan.html"};
+  const pg = {"BCA Student":"bca.html","Web Developer":"web.html","Python Programmer":"py.html","Language Learner":"Language.html"};
   $("about-cards").innerHTML = P.cards.map(c => `<li class="card">${pg[c] ? `<a href="${pg[c]}">${c}</a>` : c}</li>`).join("");
   $("stats").innerHTML = P.stats.map(s => `<div class="card stat"><b data-n="${s.n}" data-s="${s.s}">${s.n}${s.s}</b><span>${s.l}</span></div>`).join("");
   $("skill-grid").innerHTML = Object.entries(P.skills).map(([cat, list]) => `<div class="card reveal"><h3>${cat}</h3>${list.map(([n, d, v]) => `<div class="skill"><div><strong>${n}</strong><small>${d}</small></div><div class="bar" aria-hidden="true"><span style="--v:${v}%"></span></div></div>`).join("")}</div>`).join("");
