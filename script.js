@@ -58,7 +58,7 @@ window.PROFILE = {
   lb.addEventListener("click", () => lb.hidden = true);
   document.addEventListener("keydown", e => { if (e.key === "Escape") lb.hidden = true; });
   const nav = $("nav"), menu = $("menu-btn");
-  menu.addEventListener("click", () => { const o = nav.classList.ggle("open"); menu.setAttribute("aria-expanded", o); });
+  menu.addEventListener("click", () => { const o = nav.classList.toggle("open"); menu.setAttribute("aria-expanded", o); });
   nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { nav.classList.remove("open"); menu.setAttribute("aria-expanded", false); }));
   addEventListener("scroll", () => { nav.classList.toggle("small", scrollY > 40); $("top").classList.toggle("show", scrollY > 600); }, { passive: true });
   $("contact-form").addEventListener("submit", async e => {
