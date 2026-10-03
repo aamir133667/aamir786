@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dukaan — Online Shopping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  :root{
+  --ink:#161A22;
+  --navy:#1E2A5E;
+  --navy-deep:#141C42;
+  --turmeric:#E8A33D;
+  --turmeric-deep:#C9821F;
+  --success:#2E7D5B;
+  --danger:#D64545;
+  --paper:#FAFAF8;
+  --paper-dim:#F1F1EC;
+  --line:#E3E1D8;
+  --text:#1E2129;
+  --text-dim:#6B6F7A;
+  --radius:10px;
+  --font-display:'Sora', sans-serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--paper);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+.hidden{display:none !important;}
+button{font-family:inherit; cursor:pointer;}
+input,textarea,select{font-family:inherit;}
+a{color:inherit;}
+.mono{font-family:var(--font-mono);}
+.mobile-only{display:none;}
+
+/* ============================================================ TOPBAR ============================================================ */
+.topbar{
+  background:var(--navy);
+  color:#fff;
+  position:sticky; top:0; z-index:100;
+}
+.topbar-row{
+  display:flex; align-items:center; gap:1rem;
+  padding:.75rem 1.5rem;
+  max-width:1400px; margin:0 auto;
+}
+.brand{
+  font-family:var(--font-display); font-weight:800; font-size:1.5rem;
+  flex-shrink:0; cursor:pointer; letter-spacing:-.01em;
+}
+.brand-dot{color:var(--turmeric);}
+.icon-btn{
+  background:none; border:none; color:#fff; width:36px; height:36px;
+  border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+}
+.icon-btn:hover{background:rgba(255,255,255,.1);}
+
+.menu-anchor{position:relative; flex-shrink:0;}
+.mobile-menu-dropdown{
+  position:absolute; top:44px; left:0; background:#fff; color:var(--text);
+  border-radius:10px; box-shadow:0 14px 30px rgba(0,0,0,.22); overflow:hidden;
+  min-width:200px; z-index:210;
+}
+.menu-dropdown-item{
+  display:block; width:100%; text-align:left; background:none; border:none;
+  padding:.75rem 1rem; font-size:.88rem; font-weight:600; color:var(--text);
+}
+.menu-dropdown-item:hover{background:var(--paper-dim);}
+.menu-dropdown-item + .menu-dropdown-item{border-top:1px solid var(--line);}
+
+.pincode-chip{
+  display:flex; flex-direction:column; align-items:flex-start; gap:0;
+  background:none; border:1px solid rgba(255,255,255,.25); border-radius:8px;
+  padding:.35rem .7rem; color:#fff; flex-shrink:0;
+}
+.pin-label{font-size:.62rem; opacity:.75; text-transform:uppercase; letter-spacing:.04em;}
+.pin-value{font-size:.82rem; font-weight:600;}
+
+.search-form{
+  flex:1; display:flex; align-items:stretch; min-width:0;
+  background:#fff; border-radius:8px; overflow:hidden;
+}
+.search-cat{
+  border:none; background:var(--paper-dim); color:var(--text); font-size:.8rem;
+  padding:0 .6rem; border-right:1px solid var(--line); max-width:120px;
+}
+.search-form input[type=text]{
+  flex:1; min-width:0; border:none; padding:.65rem .8rem; font-size:.9rem; color:var(--text);
+}
+.search-form input:focus{outline:none;}
+.search-icon-btn{
+  background:none; border:none; padding:0 .6rem; font-size:1rem; color:var(--text-dim); border-left:1px solid var(--line);
+}
+.search-submit{
+  background:var(--turmeric); border:none; color:var(--navy-deep); font-weight:700;
+  padding:0 1.2rem; font-size:.85rem;
+}
+.search-submit:hover{background:var(--turmeric-deep); color:#fff;}
+.search-suggestions{
+  position:absolute; top:56px; left:0; right:0; background:#fff; z-index:50;
+}
+
+.topbar-actions{display:flex; align-items:center; gap:.3rem; flex-shrink:0;}
+.topbar-action{
+  background:none; border:none; color:#fff; display:flex; flex-direction:column; align-items:center;
+  gap:1px; padding:.3rem .6rem; border-radius:8px; font-size:.68rem; position:relative; min-width:52px;
+}
+.topbar-action:hover{background:rgba(255,255,255,.1);}
+.ta-icon{font-size:1.15rem;}
+.ta-text{font-weight:600;}
+.badge{
+  position:absolute; top:0; right:2px; background:var(--danger); color:#fff; font-size:.62rem; font-weight:700;
+  min-width:16px; height:16px; border-radius:8px; display:flex; align-items:center; justify-content:center; padding:0 3px;
+}
+
+.category-rail{
+  display:flex; gap:.5rem; overflow-x:auto; padding:.5rem 1.5rem .7rem;
+  max-width:1400px; margin:0 auto; background:var(--navy-deep);
+}
+.category-pill{
+  flex-shrink:0; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); color:#fff;
+  border-radius:16px; padding:.35rem .9rem; font-size:.8rem; font-weight:600;
+}
+.category-pill:hover, .category-pill.active{background:var(--turmeric); border-color:var(--turmeric); color:var(--navy-deep);}
+
+/* ============================================================ MAIN / SECTIONS ============================================================ */
+#mainContent{max-width:1400px; margin:0 auto; padding:1.6rem 1.5rem 3rem;}
+.view-title{font-family:var(--font-display); font-size:1.6rem; margin:0 0 1.2rem;}
+
+.hero{
+  display:flex; align-items:center; justify-content:space-between; gap:2rem;
+  background:linear-gradient(120deg, var(--navy), var(--navy-deep));
+  color:#fff; border-radius:18px; padding:2.4rem 2.6rem; margin-bottom:2.2rem; flex-wrap:wrap;
+}
+.hero-copy{max-width:520px;}
+.eyebrow{
+  font-family:var(--font-mono); font-size:.72rem; letter-spacing:.06em; color:var(--turmeric);
+  text-transform:uppercase; display:block; margin-bottom:.7rem;
+}
+.hero-copy h1{font-family:var(--font-display); font-size:2rem; line-height:1.2; margin:0 0 .8rem;}
+.hero-copy p{color:rgba(255,255,255,.8); margin:0 0 1.3rem; font-size:.95rem;}
+.hero-cta{
+  background:var(--turmeric); border:none; color:var(--navy-deep); font-weight:700; padding:.75rem 1.5rem;
+  border-radius:24px; font-size:.9rem;
+}
+.hero-cta:hover{background:#fff;}
+
+/* ---- signature price-tag / receipt element ---- */
+.price-tag{
+  background:#fff; color:var(--text); border-radius:10px; padding:1.1rem 1.3rem; position:relative;
+  min-width:220px; box-shadow:0 14px 30px rgba(0,0,0,.18);
+}
+.tag-row{display:flex; justify-content:space-between; align-items:center; font-size:.85rem; padding:.25rem 0; gap:1rem;}
+.tag-row.highlight{font-weight:700; font-size:1rem; color:var(--navy);}
+.tag-row .strike{text-decoration:line-through; color:var(--text-dim); font-weight:500;}
+.tag-perf{
+  height:1px; margin-top:.4rem;
+  background-image:repeating-linear-gradient(to right, var(--line) 0 6px, transparent 6px 12px);
+}
+.hero-tag{flex-shrink:0;}
+
+.product-section{margin-bottom:2.2rem;}
+.section-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:.9rem; flex-wrap:wrap; gap:.5rem;}
+.section-head h2{font-family:var(--font-display); font-size:1.2rem; margin:0;}
+.countdown-eyebrow{font-size:.75rem; color:var(--danger); font-weight:600;}
+
+.product-rail{display:flex; gap:1rem; overflow-x:auto; padding:.2rem .1rem .6rem;}
+.product-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:1rem;}
+
+.product-card{
+  background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  width:210px; flex-shrink:0; display:flex; flex-direction:column; transition:box-shadow .15s ease, transform .15s ease;
+  cursor:pointer;
+}
+.product-grid .product-card{width:auto;}
+.product-card:hover{box-shadow:0 10px 26px rgba(0,0,0,.1); transform:translateY(-2px);}
+.pc-badge{
+  position:absolute; margin:.5rem; font-size:.62rem; font-weight:700; text-transform:uppercase;
+  padding:.2rem .5rem; border-radius:4px; color:#fff; letter-spacing:.03em;
+}
+.pc-badge.deal{background:var(--danger);}
+.pc-badge.bestseller{background:var(--navy);}
+.pc-badge.new{background:var(--success);}
+.pc-badge.seller{background:var(--turmeric-deep);}
+.pc-img-wrap{position:relative; aspect-ratio:1/1; background:var(--paper-dim);}
+.pc-img-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+.pc-wishlist-btn{
+  position:absolute; top:.5rem; right:.5rem; background:rgba(255,255,255,.9); border:none;
+  width:30px; height:30px; border-radius:50%; font-size:1rem;
+}
+.pc-wishlist-btn.active{color:var(--danger);}
+.pc-body{padding:.7rem .8rem .9rem; display:flex; flex-direction:column; gap:.25rem; flex:1;}
+.pc-brand{font-size:.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.03em;}
+.pc-name{font-size:.85rem; font-weight:600; line-height:1.3; min-height:2.2em;}
+.pc-rating{font-size:.72rem; color:var(--text-dim);}
+.pc-rating b{background:var(--success); color:#fff; padding:.05rem .35rem; border-radius:4px; margin-right:.35rem; font-size:.72rem;}
+.pc-price-row{display:flex; align-items:baseline; gap:.4rem; margin-top:.2rem;}
+.pc-price{font-family:var(--font-mono); font-weight:700; font-size:.95rem;}
+.pc-mrp{font-family:var(--font-mono); font-size:.75rem; color:var(--text-dim); text-decoration:line-through;}
+.pc-discount{font-size:.72rem; color:var(--success); font-weight:700;}
+.pc-add-btn{
+  margin:.6rem .8rem .8rem; padding:.5rem; border:1.5px solid var(--navy); border-radius:8px; background:none;
+  font-weight:600; font-size:.8rem; color:var(--navy);
+}
+.pc-add-btn:hover{background:var(--navy); color:#fff;}
+
+/* ============================================================ BUTTONS ============================================================ */
+.btn-solid{
+  background:var(--navy); color:#fff; border:none; border-radius:8px; padding:.7rem 1.3rem;
+  font-weight:700; font-size:.9rem;
+}
+.btn-solid:hover{background:var(--navy-deep);}
+.btn-outline{
+  background:#fff; border:1.5px solid var(--navy); color:var(--navy); border-radius:8px; padding:.65rem 1.2rem;
+  font-weight:600; font-size:.88rem;
+}
+.btn-outline:hover{background:var(--navy); color:#fff;}
+.btn-lg{padding:.9rem 1.6rem; font-size:.95rem;}
+.full-width{width:100%;}
+.text-link{background:none; border:none; color:var(--navy); font-weight:600; font-size:.85rem; padding:0; text-decoration:underline;}
+
+/* ============================================================ SEARCH / FILTERS ============================================================ */
+.search-shell{display:flex; gap:1.6rem; align-items:flex-start;}
+.filters-panel{width:230px; flex-shrink:0; background:#fff; border:1px solid var(--line); border-radius:12px; padding:1.1rem;}
+.filters-panel h3{font-family:var(--font-display); font-size:1rem; margin:0 0 .8rem;}
+.filter-group{margin-bottom:1.1rem; padding-bottom:1.1rem; border-bottom:1px solid var(--line);}
+.filter-group:last-of-type{border-bottom:none;}
+.filter-group h4{font-size:.78rem; text-transform:uppercase; letter-spacing:.03em; color:var(--text-dim); margin:0 0 .5rem;}
+.filter-list{display:flex; flex-direction:column; gap:.4rem;}
+.filter-check{display:flex; align-items:center; gap:.5rem; font-size:.84rem;}
+.price-range-row{display:flex; align-items:center; gap:.5rem;}
+.price-range-row input{width:70px; padding:.4rem; border:1px solid var(--line); border-radius:6px; font-size:.8rem;}
+
+.search-results-col{flex:1; min-width:0;}
+.results-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;}
+.results-count{font-size:.85rem; color:var(--text-dim);}
+#sortSelect{padding:.5rem .7rem; border:1px solid var(--line); border-radius:8px; font-size:.85rem;}
+
+/* ============================================================ PRODUCT PAGE ============================================================ */
+.product-shell{display:flex; gap:2.4rem; flex-wrap:wrap; margin-bottom:2rem;}
+.product-gallery{width:400px; flex-shrink:0;}
+.gallery-main{aspect-ratio:1/1; border-radius:12px; overflow:hidden; background:var(--paper-dim); margin-bottom:.7rem;}
+.gallery-main img{width:100%; height:100%; object-fit:cover;}
+.gallery-thumbs{display:flex; gap:.5rem;}
+.gallery-thumbs img{width:64px; height:64px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent;}
+.gallery-thumbs img.active{border-color:var(--navy);}
+
+.product-info{flex:1; min-width:280px;}
+.product-brand{font-size:.8rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.03em; margin:0;}
+.product-name{font-family:var(--font-display); font-size:1.5rem; margin:.2rem 0 .6rem;}
+.product-rating-row{display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;}
+.rating-chip{background:var(--success); color:#fff; font-size:.8rem; font-weight:700; padding:.15rem .55rem; border-radius:5px;}
+.rating-count{font-size:.8rem; color:var(--text-dim);}
+.pdo-price-tag{margin-bottom:1.1rem; max-width:320px;}
+
+.variants-block{margin-bottom:1rem;}
+.variant-group{margin-bottom:.8rem;}
+.variant-label{font-size:.8rem; font-weight:600; margin-bottom:.4rem; display:block;}
+.variant-opts{display:flex; gap:.5rem; flex-wrap:wrap;}
+.variant-opt{
+  padding:.4rem .8rem; border:1.5px solid var(--line); border-radius:6px; background:#fff; font-size:.82rem;
+}
+.variant-opt.active{border-color:var(--navy); background:var(--navy); color:#fff;}
+
+.stock-line{font-size:.85rem; font-weight:600; margin:0 0 .8rem;}
+.stock-line.in-stock{color:var(--success);}
+.stock-line.out-stock{color:var(--danger);}
+
+.pincode-check-row{display:flex; gap:.5rem; margin-bottom:.4rem;}
+.pincode-check-row input{flex:1; padding:.6rem .8rem; border:1px solid var(--line); border-radius:8px; font-size:.85rem;}
+.delivery-line{font-size:.82rem; color:var(--text-dim); margin:0 0 1.2rem;}
+
+.product-cta-row{display:flex; gap:.8rem; margin-bottom:.7rem;}
+.product-cta-row.secondary{gap:1.3rem;}
+.seller-card{
+  background:var(--paper-dim); border-radius:10px; padding:.9rem 1rem; margin-top:1rem; font-size:.82rem;
+}
+.seller-card p{margin:.25rem 0;}
+.escrow-note{color:var(--turmeric-deep); font-weight:600; margin-top:.5rem !important;}
+
+.product-tabs{margin-bottom:2rem;}
+.tabs-head{display:flex; gap:1.6rem; border-bottom:1px solid var(--line); margin-bottom:1rem;}
+.tab-btn{background:none; border:none; padding:.7rem 0; font-size:.88rem; font-weight:600; color:var(--text-dim); border-bottom:2px solid transparent;}
+.tab-btn.active{color:var(--navy); border-color:var(--turmeric);}
+.tab-panel{font-size:.88rem; line-height:1.6;}
+.spec-row{display:flex; padding:.5rem 0; border-bottom:1px solid var(--paper-dim); font-size:.85rem;}
+.spec-row span:first-child{width:180px; color:var(--text-dim); flex-shrink:0;}
+.review-item{padding:.9rem 0; border-bottom:1px solid var(--paper-dim);}
+.review-item .rv-head{display:flex; align-items:center; gap:.6rem; margin-bottom:.3rem;}
+.review-item .rv-stars{color:var(--turmeric-deep); font-weight:700;}
+.qna-item{padding:.7rem 0; border-bottom:1px solid var(--paper-dim); font-size:.85rem;}
+.qna-item .q{font-weight:600;}
+.qna-item .a{color:var(--text-dim); margin-top:.2rem;}
+
+/* ============================================================ CART ============================================================ */
+.cart-shell{display:flex; gap:1.8rem; align-items:flex-start; flex-wrap:wrap;}
+.cart-items-col{flex:2; min-width:320px;}
+.cart-summary-col{flex:1; min-width:260px; position:sticky; top:90px;}
+
+.cart-item{
+  display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--line); align-items:center;
+}
+.cart-item img{width:80px; height:80px; object-fit:cover; border-radius:8px; background:var(--paper-dim); flex-shrink:0;}
+.cart-item-info{flex:1; min-width:0;}
+.cart-item-info .ci-name{font-weight:600; font-size:.9rem; margin:0 0 .2rem;}
+.cart-item-info .ci-variant{font-size:.78rem; color:var(--text-dim);}
+.cart-item-info .ci-price{font-family:var(--font-mono); font-weight:700; margin-top:.3rem;}
+.qty-control{display:flex; align-items:center; gap:.5rem;}
+.qty-control button{width:28px; height:28px; border-radius:6px; border:1px solid var(--line); background:#fff; font-weight:700;}
+.cart-item-actions{display:flex; flex-direction:column; gap:.4rem; align-items:flex-end;}
+.saved-later-block{margin-top:1.5rem;}
+.saved-later-block h3{font-family:var(--font-display); font-size:1.05rem;}
+
+.coupon-row{display:flex; gap:.5rem; margin-bottom:.4rem;}
+.coupon-row input{flex:1; padding:.6rem .8rem; border:1px solid var(--line); border-radius:8px; font-size:.85rem;}
+.coupon-msg{font-size:.8rem; min-height:1.1rem; color:var(--success); margin:0 0 .8rem;}
+.summary-tag{margin-bottom:1rem;}
+.total-row{border-top:1px solid var(--line); margin-top:.4rem; padding-top:.6rem;}
+
+.empty-state{text-align:center; color:var(--text-dim); padding:3rem 1rem; font-size:.9rem;}
+
+/* ============================================================ CHECKOUT ============================================================ */
+.checkout-shell{display:flex; gap:1.8rem; align-items:flex-start; flex-wrap:wrap;}
+.checkout-form-col{flex:2; min-width:320px; display:flex; flex-direction:column; gap:1.2rem;}
+.checkout-block{background:#fff; border:1px solid var(--line); border-radius:12px; padding:1.2rem;}
+.checkout-block h3{font-family:var(--font-display); font-size:1.05rem; margin:0 0 .9rem;}
+.settings-form{display:flex; flex-direction:column; gap:.85rem;}
+.settings-form label{display:flex; flex-direction:column; gap:.3rem; font-size:.82rem; font-weight:600; color:var(--text-dim);}
+.settings-form input, .settings-form textarea, .settings-form select{
+  padding:.6rem .8rem; border:1.5px solid var(--line); border-radius:8px; font-size:.88rem; color:var(--text); font-weight:500;
+}
+.two-col{display:flex; gap:.8rem;}
+.two-col label{flex:1;}
+.payment-options{display:flex; flex-direction:column; gap:.6rem;}
+.payment-opt{display:flex; align-items:center; gap:.6rem; font-size:.88rem; padding:.5rem; border:1px solid var(--line); border-radius:8px;}
+.settings-hint{font-size:.8rem; color:var(--text-dim); margin:.6rem 0 0;}
+
+/* ============================================================ OTP / ORDER SUCCESS ============================================================ */
+.otp-confirm-box, .order-success-box{
+  max-width:420px; margin:3rem auto; background:#fff; border:1px solid var(--line); border-radius:14px;
+  padding:2rem; text-align:center;
+}
+.otp-confirm-box h2, .order-success-box h2{font-family:var(--font-display); font-size:1.3rem;}
+.otp-confirm-box input{
+  width:100%; padding:.8rem; border:1.5px solid var(--line); border-radius:8px; text-align:center;
+  font-size:1.2rem; letter-spacing:.3em; margin:1rem 0; font-family:var(--font-mono);
+}
+.success-mark{
+  width:56px; height:56px; border-radius:50%; background:var(--success); color:#fff; font-size:1.8rem;
+  display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;
+}
+.order-success-box button{margin:.5rem;}
+.token-highlight-box{
+  background:var(--paper-dim); border:1.5px dashed var(--turmeric-deep); border-radius:10px;
+  padding:1rem; margin:1rem 0; text-align:left;
+}
+.token-display{font-size:1.5rem; font-weight:700; letter-spacing:.35em; text-align:center; color:var(--navy); margin:.5rem 0 0;}
+
+/* ============================================================ ORDERS ============================================================ */
+.order-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:1.1rem 1.3rem; margin-bottom:1rem;}
+.order-card-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:.7rem; flex-wrap:wrap; gap:.5rem;}
+.order-status-badge{font-size:.72rem; font-weight:700; padding:.25rem .6rem; border-radius:6px; background:var(--success); color:#fff;}
+.order-items-preview{font-size:.82rem; color:var(--text-dim); margin:.3rem 0;}
+.order-track{display:flex; gap:.3rem; margin-top:.8rem; overflow-x:auto;}
+.track-step{font-size:.68rem; padding:.25rem .5rem; border-radius:5px; background:var(--paper-dim); color:var(--text-dim); white-space:nowrap;}
+.track-step.done{background:var(--navy); color:#fff;}
+.escrow-confirm-row{display:flex; gap:.5rem; margin-top:.9rem; align-items:center; flex-wrap:wrap;}
+.escrow-confirm-row input{padding:.5rem .7rem; border:1.5px solid var(--line); border-radius:8px; font-family:var(--font-mono); letter-spacing:.2em; width:130px;}
+.escrow-pill{font-size:.68rem; font-weight:700; padding:.2rem .55rem; border-radius:5px; margin-top:.6rem; display:inline-block;}
+.escrow-pill.held{background:#FCEFDA; color:var(--turmeric-deep);}
+.escrow-pill.released{background:#E1F1E9; color:var(--success);}
+
+/* ============================================================ MODALS / AUTH ============================================================ */
+.modal-backdrop{position:fixed; inset:0; z-index:220; background:rgba(20,20,25,.55); display:flex; align-items:center; justify-content:center; padding:1rem;}
+.modal-box{background:#fff; border-radius:14px; width:min(440px,100%); max-height:90vh; overflow-y:auto; padding:1.4rem;}
+.modal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;}
+.modal-head h3{margin:0; font-family:var(--font-display); font-size:1.15rem;}
+.auth-modal-box .modal-head{align-items:flex-start;}
+.auth-tabs{display:flex; gap:1.2rem;}
+.auth-tab{background:none; border:none; font-size:.9rem; font-weight:700; color:var(--text-dim); padding-bottom:.4rem; border-bottom:2px solid transparent;}
+.auth-tab.active{color:var(--navy); border-color:var(--turmeric);}
+.auth-panel{margin-top:.5rem;}
+.otp-row{margin:.2rem 0;}
+.otp-row input{width:100%; padding:.6rem .8rem; border:1.5px solid var(--line); border-radius:8px; font-family:var(--font-mono); letter-spacing:.2em; text-align:center;}
+
+/* ============================================================ SELLER DASHBOARD ============================================================ */
+.sp-img-preview-wrap{width:120px; height:120px; border-radius:10px; overflow:hidden; background:var(--paper-dim);}
+.sp-img-preview-wrap img{width:100%; height:100%; object-fit:cover;}
+.seller-product-row{
+  display:flex; gap:.9rem; align-items:center; padding:.8rem 0; border-bottom:1px solid var(--paper-dim);
+}
+.seller-product-row img{width:56px; height:56px; object-fit:cover; border-radius:8px; background:var(--paper-dim); flex-shrink:0;}
+.seller-product-row .spr-name{font-weight:600; font-size:.88rem;}
+.seller-product-row .spr-meta{font-size:.78rem; color:var(--text-dim);}
+.seller-txn-row{padding:.8rem 0; border-bottom:1px solid var(--paper-dim); font-size:.85rem;}
+.seller-txn-row .stx-head{display:flex; justify-content:space-between; gap:.6rem; flex-wrap:wrap;}
+
+/* ============================================================ AI FAB ============================================================ */
+.ai-fab{
+  position:fixed; bottom:1.4rem; right:1.4rem; z-index:150;
+  background:linear-gradient(120deg, var(--turmeric), var(--turmeric-deep)); color:var(--navy-deep);
+  border:none; border-radius:24px; padding:.75rem 1.2rem; font-weight:700; font-size:.9rem;
+  box-shadow:0 10px 24px rgba(0,0,0,.2);
+}
+.ai-fab:hover{transform:translateY(-2px);}
+
+.site-footer{text-align:center; padding:1.5rem; color:var(--text-dim); font-size:.8rem; border-top:1px solid var(--line);}
+
+/* ============================================================ RESPONSIVE ============================================================ */
+@media (max-width: 900px){
+  .search-form{order:3; width:100%;}
+  .topbar-row{flex-wrap:wrap;}
+  .pincode-chip{display:none;}
+  .ta-text{display:none;}
+  .product-shell{flex-direction:column;}
+  .product-gallery{width:100%;}
+  .cart-summary-col{position:static;}
+}
+@media (max-width: 600px){
+  .mobile-only{display:flex;}
+  .hero{padding:1.6rem;}
+  .hero-copy h1{font-size:1.4rem;}
+  .search-shell, .checkout-shell{flex-direction:column;}
+  .filters-panel{width:100%;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================ TOP BAR ============================================================ -->
+<header class="topbar">
+  <div class="topbar-row">
+    <div class="menu-anchor">
+      <button id="navMenuBtn" class="icon-btn mobile-only" aria-label="Menu">☰</button>
+      <div id="mobileMenuDropdown" class="mobile-menu-dropdown hidden">
+        <button id="menuDashboardBtn" class="menu-dropdown-item">📊 Dashboard</button>
+        <button id="menuTrackBtn" class="menu-dropdown-item">📍 Track your product</button>
+      </div>
+    </div>
+    <div class="brand" id="brandHome">Dukaan<span class="brand-dot">.</span></div>
+
+    <button id="pincodeChip" class="pincode-chip">
+      <span class="pin-label">Deliver to</span>
+      <span class="pin-value" id="pinValue">Pincode daalein</span>
+    </button>
+
+    <form id="searchForm" class="search-form">
+      <select id="searchCategory" class="search-cat">
+        <option value="">Sab categories</option>
+        <option value="Shoes">Shoes</option>
+        <option value="Mobile">Mobile</option>
+        <option value="Laptop">Laptop</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Home">Home</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Products, brands aur category dhundein…" autocomplete="off">
+      <button type="button" id="voiceSearchBtn" class="search-icon-btn" title="Voice se search">🎤</button>
+      <button type="button" id="imageSearchBtn" class="search-icon-btn" title="Image se search">📷</button>
+      <button type="submit" class="search-submit">Search</button>
+    </form>
+    <div id="searchSuggestions" class="search-suggestions hidden"></div>
+
+    <div class="topbar-actions">
+      <button id="sellBtn" class="topbar-action">
+        <span class="ta-icon">🏪</span>
+        <span class="ta-text">Bechein</span>
+      </button>
+      <button id="accountBtn" class="topbar-action">
+        <span class="ta-icon">👤</span>
+        <span class="ta-text" id="accountLabel">Login</span>
+      </button>
+      <button id="ordersBtn" class="topbar-action">
+        <span class="ta-icon">📦</span>
+        <span class="ta-text">Orders</span>
+      </button>
+      <button id="wishlistBtn" class="topbar-action">
+        <span class="ta-icon">♡</span>
+        <span class="ta-text">Wishlist</span>
+        <span id="wishlistBadge" class="badge hidden">0</span>
+      </button>
+      <button id="cartBtn" class="topbar-action topbar-cart">
+        <span class="ta-icon">🛒</span>
+        <span class="ta-text">Cart</span>
+        <span id="cartBadge" class="badge hidden">0</span>
+      </button>
+    </div>
+  </div>
+
+  <nav id="categoryRail" class="category-rail"></nav>
+</header>
+
+<!-- ============================================================ MAIN ============================================================ -->
+<main id="mainContent">
+
+  <!-- ===== HOME ===== -->
+  <section id="viewHome" class="view">
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">FESTIVE SALE — ab live</span>
+        <h1>Jo chahiye, wahi milega —<br>kam daam, poora bharosa.</h1>
+        <p>Shoes, mobiles, laptops aur ghar ka saaman — sab ek hi jagah, saaf-saaf price ke saath.</p>
+        <button class="hero-cta" data-scroll="dealsSection">Deals dekhein</button>
+      </div>
+      <div class="hero-tag">
+        <div class="tag-row"><span>MRP</span><span class="mono strike">₹32,999</span></div>
+        <div class="tag-row highlight"><span>Aapka daam</span><span class="mono">₹27,999</span></div>
+        <div class="tag-perf"></div>
+      </div>
+    </div>
+
+    <section id="dealsSection" class="product-section">
+      <div class="section-head">
+        <h2>Today's Deals</h2>
+        <span class="countdown-eyebrow mono" id="dealsCountdown">khatam hone me 00:00:00</span>
+      </div>
+      <div class="product-rail" id="dealsRail"></div>
+    </section>
+
+    <section class="product-section">
+      <div class="section-head"><h2>Best Sellers</h2></div>
+      <div class="product-rail" id="bestSellersRail"></div>
+    </section>
+
+    <section class="product-section">
+      <div class="section-head"><h2>New Arrivals</h2></div>
+      <div class="product-rail" id="newArrivalsRail"></div>
+    </section>
+
+    <section class="product-section">
+      <div class="section-head"><h2>Recommended for you</h2></div>
+      <div class="product-rail" id="recommendedRail"></div>
+    </section>
+
+    <section class="product-section hidden" id="sellerRailSection">
+      <div class="section-head"><h2>Dukaan Sellers ke products</h2></div>
+      <div class="product-rail" id="sellerProductsRail"></div>
+    </section>
+
+    <section class="product-section hidden" id="recentlyViewedSection">
+      <div class="section-head"><h2>Recently Viewed</h2></div>
+      <div class="product-rail" id="recentlyViewedRail"></div>
+    </section>
+  </section>
+
+  <!-- ===== SEARCH / RESULTS ===== -->
+  <section id="viewSearch" class="view hidden">
+    <div class="search-shell">
+      <aside class="filters-panel">
+        <h3>Filters</h3>
+
+        <div class="filter-group">
+          <h4>Category</h4>
+          <div id="filterCategory" class="filter-list"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Brand</h4>
+          <div id="filterBrand" class="filter-list"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Price</h4>
+          <div class="price-range-row">
+            <input type="number" id="filterPriceMin" placeholder="Min">
+            <span>—</span>
+            <input type="number" id="filterPriceMax" placeholder="Max">
+          </div>
+        </div>
+        <div class="filter-group">
+          <h4>Rating</h4>
+          <div id="filterRating" class="filter-list"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Availability</h4>
+          <label class="filter-check"><input type="checkbox" id="filterInStock"> Sirf stock me maujood</label>
+        </div>
+        <button id="clearFiltersBtn" class="text-link">Sab filters hatayein</button>
+      </aside>
+
+      <div class="search-results-col">
+        <div class="results-toolbar">
+          <span id="resultsCount" class="results-count"></span>
+          <select id="sortSelect">
+            <option value="relevance">Sort: Relevance</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="rating">Rating</option>
+            <option value="newest">Newest</option>
+            <option value="popularity">Popularity</option>
+          </select>
+        </div>
+        <div id="searchResultsGrid" class="product-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCT PAGE ===== -->
+  <section id="viewProduct" class="view hidden">
+    <div class="product-shell">
+      <div class="product-gallery">
+        <div class="gallery-main"><img id="galleryMainImg" src="" alt=""></div>
+        <div class="gallery-thumbs" id="galleryThumbs"></div>
+      </div>
+
+      <div class="product-info">
+        <p class="product-brand" id="pdBrand"></p>
+        <h1 class="product-name" id="pdName"></h1>
+        <div class="product-rating-row">
+          <span class="rating-chip" id="pdRatingChip"></span>
+          <span class="rating-count" id="pdRatingCount"></span>
+        </div>
+
+        <div class="price-tag pdo-price-tag">
+          <div class="tag-row"><span>MRP</span><span class="mono strike" id="pdMrp"></span></div>
+          <div class="tag-row highlight"><span>Price</span><span class="mono" id="pdPrice"></span></div>
+          <div class="tag-row"><span>Aap bachaye</span><span class="mono" id="pdDiscount"></span></div>
+          <div class="tag-perf"></div>
+        </div>
+
+        <div id="pdVariants" class="variants-block"></div>
+
+        <p class="stock-line" id="pdStock"></p>
+
+        <div class="pincode-check-row">
+          <input type="text" id="pdPincodeInput" placeholder="Delivery pincode check karein" maxlength="6">
+          <button id="pdPincodeBtn" class="btn-outline">Check</button>
+        </div>
+        <p class="delivery-line" id="pdDeliveryLine"></p>
+
+        <div class="product-cta-row">
+          <button id="pdAddToCartBtn" class="btn-outline btn-lg">Add to Cart</button>
+          <button id="pdBuyNowBtn" class="btn-solid btn-lg">Buy Now</button>
+        </div>
+        <div class="product-cta-row secondary">
+          <button id="pdWishlistBtn" class="text-link">♡ Wishlist me save karein</button>
+          <button id="pdShareBtn" class="text-link">↗ Share karein</button>
+        </div>
+
+        <div class="seller-card">
+          <p><strong>Bechne wala:</strong> <span id="pdSeller"></span></p>
+          <p><strong>Return policy:</strong> 7 din ke andar return/replace</p>
+          <p><strong>Warranty:</strong> 1 saal manufacturer warranty</p>
+          <p id="pdEscrowNote" class="escrow-note hidden">🔒 Payment seller ko turant nahi jaata — jab tak aap delivery token verify nahi karte, paisa Dukaan ke paas surakshit rehta hai.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-tabs">
+      <div class="tabs-head">
+        <button class="tab-btn active" data-ptab="description">Description</button>
+        <button class="tab-btn" data-ptab="specs">Specifications</button>
+        <button class="tab-btn" data-ptab="reviews">Ratings &amp; Reviews</button>
+        <button class="tab-btn" data-ptab="qna">Questions &amp; Answers</button>
+      </div>
+      <div class="tabs-body">
+        <div id="tabDescription" class="tab-panel"></div>
+        <div id="tabSpecs" class="tab-panel hidden"></div>
+        <div id="tabReviews" class="tab-panel hidden"></div>
+        <div id="tabQna" class="tab-panel hidden"></div>
+      </div>
+    </div>
+
+    <section class="product-section">
+      <div class="section-head"><h2>Similar products</h2></div>
+      <div class="product-rail" id="similarRail"></div>
+    </section>
+  </section>
+
+  <!-- ===== CART ===== -->
+  <section id="viewCart" class="view hidden">
+    <h1 class="view-title">Aapka Cart</h1>
+    <div class="cart-shell">
+      <div class="cart-items-col">
+        <div id="cartItemsList"></div>
+        <div id="savedForLaterBlock" class="saved-later-block hidden">
+          <h3>Baad ke liye save kiya gaya</h3>
+          <div id="savedForLaterList"></div>
+        </div>
+      </div>
+      <aside class="cart-summary-col">
+        <div class="coupon-row">
+          <input type="text" id="couponInput" placeholder="Coupon code (jaise SAVE10)">
+          <button id="applyCouponBtn" class="btn-outline">Apply</button>
+        </div>
+        <p id="couponMsg" class="coupon-msg"></p>
+        <div class="price-tag summary-tag">
+          <div class="tag-row"><span>Product Price</span><span class="mono" id="sumSubtotal">₹0</span></div>
+          <div class="tag-row"><span>Discount</span><span class="mono" id="sumDiscount">-₹0</span></div>
+          <div class="tag-row"><span>Coupon</span><span class="mono" id="sumCoupon">-₹0</span></div>
+          <div class="tag-row"><span>Delivery</span><span class="mono" id="sumDelivery">₹0</span></div>
+          <div class="tag-row"><span>Tax (GST 18%)</span><span class="mono" id="sumTax">₹0</span></div>
+          <div class="tag-row highlight total-row"><span>Total</span><span class="mono" id="sumTotal">₹0</span></div>
+          <div class="tag-perf"></div>
+        </div>
+        <button id="checkoutBtn" class="btn-solid btn-lg full-width">Checkout par jayein</button>
+      </aside>
+    </div>
+    <div id="cartEmptyState" class="empty-state hidden">Aapka cart khali hai. Kuch shopping karein!</div>
+  </section>
+
+  <!-- ===== CHECKOUT ===== -->
+  <section id="viewCheckout" class="view hidden">
+    <h1 class="view-title">Checkout</h1>
+    <div class="checkout-shell">
+      <div class="checkout-form-col">
+        <div class="checkout-block">
+          <h3>Delivery address</h3>
+          <form id="addressForm" class="settings-form">
+            <label>Poora naam <input type="text" id="addrName" required></label>
+            <label>Mobile number <input type="tel" id="addrMobile" maxlength="10" placeholder="10 digit mobile" required></label>
+            <label>Address (Ghar/Flat, Sadak) <textarea id="addrLine" rows="2" required></textarea></label>
+            <div class="two-col">
+              <label>Sheher <input type="text" id="addrCity" required></label>
+              <label>Pincode <input type="text" id="addrPincode" maxlength="6" required></label>
+            </div>
+          </form>
+        </div>
+
+        <div class="checkout-block">
+          <h3>Payment method</h3>
+          <div class="payment-options" id="paymentOptions">
+            <label class="payment-opt"><input type="radio" name="payMethod" value="upi" checked><span>UPI</span></label>
+            <label class="payment-opt"><input type="radio" name="payMethod" value="card"><span>Credit / Debit Card</span></label>
+            <label class="payment-opt"><input type="radio" name="payMethod" value="netbanking"><span>Net Banking</span></label>
+            <label class="payment-opt"><input type="radio" name="payMethod" value="wallet"><span>Wallet</span></label>
+            <label class="payment-opt"><input type="radio" name="payMethod" value="cod"><span>Cash on Delivery</span></label>
+          </div>
+          <p class="settings-hint">Demo checkout hai — abhi koi real payment gateway charge nahi hoga.</p>
+        </div>
+      </div>
+
+      <aside class="cart-summary-col">
+        <div class="price-tag summary-tag" id="checkoutSummaryTag"></div>
+        <button id="placeOrderBtn" class="btn-solid btn-lg full-width">Order Place karein</button>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== OTP CONFIRM (per-order) ===== -->
+  <section id="viewOtpConfirm" class="view hidden">
+    <div class="otp-confirm-box">
+      <h2>Order confirm karne ke liye OTP daalein</h2>
+      <p class="settings-hint">Demo OTP hai abhi ke liye: <strong>123456</strong> — asli mobile OTP backend update hone ke baad activate hoga.</p>
+      <input type="text" id="otpConfirmInput" maxlength="6" placeholder="6-digit OTP">
+      <button id="otpConfirmBtn" class="btn-solid btn-lg">Verify &amp; Confirm Order</button>
+      <p id="otpConfirmMsg" class="settings-hint"></p>
+    </div>
+  </section>
+
+  <!-- ===== ORDER SUCCESS ===== -->
+  <section id="viewOrderSuccess" class="view hidden">
+    <div class="order-success-box">
+      <div class="success-mark">✓</div>
+      <h2>Order confirm ho gaya!</h2>
+      <p>Order ID: <span class="mono" id="successOrderId"></span></p>
+      <div id="successTokenBlock" class="token-highlight-box hidden">
+        <p class="settings-hint">Ye <strong>delivery confirmation token</strong> sambhal kar rakhein. Jab product mil jaaye, tabhi ye token order page par daalein — tabhi seller ko payment release hogi.</p>
+        <p class="token-display mono" id="successTokenValue"></p>
+      </div>
+      <button id="goToOrdersBtn" class="btn-solid">Mere orders dekhein</button>
+      <button id="goHomeBtn" class="text-link">Shopping jaari rakhein</button>
+    </div>
+  </section>
+
+  <!-- ===== ORDERS ===== -->
+  <section id="viewOrders" class="view hidden">
+    <h1 class="view-title">Mere Orders</h1>
+    <div id="ordersList"></div>
+    <div id="ordersEmptyState" class="empty-state hidden">Abhi tak koi order nahi hai.</div>
+  </section>
+
+  <!-- ===== WISHLIST ===== -->
+  <section id="viewWishlist" class="view hidden">
+    <h1 class="view-title">Aapki Wishlist</h1>
+    <div id="wishlistGrid" class="product-grid"></div>
+    <div id="wishlistEmptyState" class="empty-state hidden">Wishlist khali hai — pasand ke products yahan save karein.</div>
+  </section>
+
+  <!-- ===== SELLER DASHBOARD ===== -->
+  <section id="viewSellerDashboard" class="view hidden">
+    <h1 class="view-title">Seller Dashboard</h1>
+
+    <div id="sellerNotOnboarded" class="empty-state">
+      Aap abhi seller nahi bane hain. <button id="dashBecomeSellerBtn" class="text-link">Seller banein</button>
+    </div>
+
+    <div id="sellerOnboardedArea" class="hidden">
+      <div class="checkout-block">
+        <h3>Aapki Seller Profile</h3>
+        <p class="settings-hint">Email: <span id="sellerProfileEmail" class="mono"></span></p>
+        <p class="settings-hint">Mobile: <span id="sellerProfileMobile" class="mono"></span> (OTP verified ✓)</p>
+        <p class="settings-hint">Pickup Pincode: <span id="sellerProfilePincode" class="mono"></span></p>
+      </div>
+
+      <div class="checkout-block">
+        <h3>Naya Product Add Karein</h3>
+        <form id="sellerProductForm" class="settings-form">
+          <label>Product photo <input type="file" id="spImageInput" accept="image/*"></label>
+          <div id="spImagePreviewWrap" class="sp-img-preview-wrap hidden"><img id="spImagePreview" alt="preview"></div>
+          <label>Product ka naam <input type="text" id="spName" required></label>
+          <label>Category
+            <select id="spCategory" required>
+              <option value="">Category chunein</option>
+              <option>Shoes</option><option>Mobile</option><option>Laptop</option>
+              <option>Electronics</option><option>Fashion</option><option>Home</option>
+            </select>
+          </label>
+          <div class="two-col">
+            <label>Price (₹) <input type="number" id="spPrice" min="1" required></label>
+            <label>MRP (₹, optional) <input type="number" id="spMrp" min="1"></label>
+          </div>
+          <label>Description <textarea id="spDescription" rows="2"></textarea></label>
+          <label>Stock quantity <input type="number" id="spStock" min="1" value="10"></label>
+          <button type="submit" class="btn-solid full-width">Product Add Karein</button>
+          <p id="spMsg" class="settings-hint"></p>
+        </form>
+      </div>
+
+      <div class="checkout-block">
+        <h3>Aapke Products</h3>
+        <div id="sellerMyProductsList"></div>
+        <div id="sellerMyProductsEmpty" class="empty-state hidden">Abhi tak koi product add nahi kiya.</div>
+      </div>
+
+      <div class="checkout-block">
+        <h3>Transactions (Escrow Status)</h3>
+        <p class="settings-hint">Jab tak buyer delivery token verify nahi karta, payment Dukaan ke paas surakshit rehti hai — aapke account me nahi jaati.</p>
+        <div id="sellerTransactionsList"></div>
+        <div id="sellerTransactionsEmpty" class="empty-state hidden">Abhi tak koi transaction nahi hai.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 Dukaan — Demo shopping experience. Yahan koi real payment nahi hota.</p>
+</footer>
+
+<!-- ============================================================ AUTH MODAL ============================================================ -->
+<div id="authModal" class="modal-backdrop hidden">
+  <div class="modal-box auth-modal-box">
+    <div class="modal-head">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-atab="login">Login</button>
+        <button class="auth-tab" data-atab="signup">Naya account banayein</button>
+      </div>
+      <button id="authCloseBtn" class="icon-btn">✕</button>
+    </div>
+
+    <form id="loginForm" class="settings-form auth-panel">
+      <label>Email <input type="email" id="loginEmailInput" required></label>
+      <label>Password <input type="password" id="loginPasswordInput" required></label>
+      <button type="submit" class="btn-solid full-width">Login karein</button>
+      <p id="loginMsg" class="settings-hint"></p>
+    </form>
+
+    <form id="signupForm" class="settings-form auth-panel hidden">
+      <label>Poora naam <input type="text" id="signupName" required></label>
+      <label>Email <input type="email" id="signupEmail" required></label>
+      <label>Mobile number <input type="tel" id="signupMobile" maxlength="10" placeholder="10 digit mobile" required></label>
+      <label>Password <input type="password" id="signupPassword" required></label>
+
+      <div id="signupOtpRow" class="otp-row hidden">
+        <input type="text" id="signupOtpInput" maxlength="6" placeholder="Email par aaya OTP">
+      </div>
+
+      <button type="button" id="sendOtpBtn" class="btn-outline full-width">OTP bhejein (email par)</button>
+      <button type="submit" id="verifySignupBtn" class="btn-solid full-width hidden">Verify &amp; Account banayein</button>
+      <p id="signupMsg" class="settings-hint"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================ SELLER ONBOARDING MODAL ============================================================ -->
+<div id="sellerAuthModal" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>Dukaan par Bechna Shuru Karein</h3>
+      <button id="sellerAuthCloseBtn" class="icon-btn">✕</button>
+    </div>
+    <form id="sellerAuthForm" class="settings-form">
+      <label>Email address <input type="email" id="sellerEmailInput" required></label>
+
+      <label>Mobile number <input type="tel" id="sellerMobileInput" maxlength="10" placeholder="10 digit mobile" required></label>
+      <div class="two-col">
+        <button type="button" id="sellerSendOtpBtn" class="btn-outline full-width">OTP bhejein</button>
+      </div>
+      <div id="sellerOtpRow" class="otp-row hidden">
+        <input type="text" id="sellerOtpInput" maxlength="6" placeholder="6-digit OTP">
+      </div>
+
+      <label>Pickup address pincode <input type="text" id="sellerPincodeInput" maxlength="6" placeholder="6-digit pincode" required></label>
+
+      <button type="submit" class="btn-solid full-width">Seller Account Banayein</button>
+      <p id="sellerAuthMsg" class="settings-hint"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================ AI ASSISTANT (placeholder — future separate page) ============================================================ -->
+<button id="aiAssistantBtn" class="ai-fab" title="AI Shopping Assistant">✨ AI</button>
+<div id="aiAssistantModal" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="modal-head"><h3>AI Shopping Assistant</h3><button id="aiCloseBtn" class="icon-btn">✕</button></div>
+    <p class="settings-hint">Ye feature abhi coming soon hai — isay ek alag AI page par baad me poori tarah banaya jayega (jaise "laptop under ₹60,000 chahiye" bol kar products dhundna).</p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+  /* =====================================================================
+   DUKAAN — FRONTEND (Phase 1: frontend-first, demo data)
+   =====================================================================
+   SERVER-BACKED (uses your existing Node backend at API_BASE):
+     - Signup: send-otp (email) -> verify via signup
+     - Login (email + password)
+   Mobile number is captured in the signup form but NOT yet sent to the
+   backend, because the current signup controller only accepts
+   {name,email,password,otp}. Store it locally for now — once you add a
+   `mobile` field + route on the backend (Phase 2), wire it in here.
+
+   EVERYTHING ELSE IS LOCAL/DEMO FOR NOW (no backend routes exist yet
+   for a shopping site — these will move server-side in Phase 2):
+     - Product catalog (hardcoded demo array below)
+     - Cart, Saved-for-later, Wishlist, Recently viewed
+     - Coupons, delivery/tax calculation
+     - Checkout, per-order OTP confirmation (demo code is always 123456)
+     - Orders + their tracking status
+     - Seller onboarding (email + mobile OTP + pickup pincode) and
+       seller-listed products (Local/demo only — Phase 2 needs real
+       seller routes + file storage for photos + real escrow ledger)
+     - Escrow-style delivery-token confirmation: every order gets a
+       4-digit deliveryToken at OTP-confirm time. For orders containing
+       a seller-listed product, payment is treated as "held by Dukaan"
+       until the buyer enters that token on the Orders page — at which
+       point it's marked "released" to the seller. This is a UI-level
+       simulation only; no real money movement happens anywhere here.
+   ===================================================================== */
+
+const API_BASE = 'http://localhost:7000';
+const ENDPOINTS = {
+  sendOtp: `${API_BASE}/api/auth/send-otp`,
+  signup:  `${API_BASE}/api/auth/signup`,
+  login:   `${API_BASE}/api/auth/login`,
+};
+
+function $(id){ return document.getElementById(id); }
+function on(el, ev, fn){ if(el) el.addEventListener(ev, fn); }
+function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str == null ? '' : String(str); return d.innerHTML; }
+function money(n){ return '₹' + Math.round(n).toLocaleString('en-IN'); }
+function imgFor(seed, w=500, h=500){ return `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`; }
+function randomDigits(n){ let s=''; for(let i=0;i<n;i++) s += Math.floor(Math.random()*10); return s; }
+
+/* ---------------- Local storage helpers (demo layer, see header) ---------------- */
+const Local = {
+  get(key, def){ try{ const raw = localStorage.getItem('dk_'+key); return raw ? JSON.parse(raw) : (def!==undefined?def:null); } catch(e){ return def!==undefined?def:null; } },
+  set(key, val){ try{ localStorage.setItem('dk_'+key, JSON.stringify(val)); } catch(e){ console.warn('storage fail', e); } }
+};
+
+/* =====================================================================
+   DEMO PRODUCT CATALOG
+   ===================================================================== */
+const PRODUCTS = [
+  { id:1, name:'Running Shoes Pro', brand:'Sprintix', category:'Shoes', price:1899, mrp:2999, rating:4.3, ratingCount:612, badge:'deal', stock:24, deliveryDays:3,
+    variants:{ Size:['UK 6','UK 7','UK 8','UK 9','UK 10'], Colour:['Black','Blue','Red'] },
+    description:'Lightweight running shoes with breathable mesh upper aur cushioned sole — roz ki daud-bhaag ke liye.',
+    specs:{ 'Material':'Mesh + EVA sole', 'Closure':'Lace-up', 'Weight':'260g', 'Ideal for':'Running, Gym' } },
+  { id:2, name:'Casual Sneakers', brand:'Walkline', category:'Shoes', price:1299, mrp:1799, rating:4.0, ratingCount:210, badge:'', stock:40, deliveryDays:4,
+    variants:{ Size:['UK 6','UK 7','UK 8','UK 9'], Colour:['White','Grey'] },
+    description:'Everyday casual sneakers, comfortable fit, roz pehanne ke liye perfect.',
+    specs:{ 'Material':'Canvas', 'Closure':'Lace-up', 'Sole':'Rubber' } },
+  { id:3, name:'Formal Leather Shoes', brand:'Corvo', category:'Shoes', price:2499, mrp:3499, rating:4.5, ratingCount:89, badge:'bestseller', stock:15, deliveryDays:5,
+    variants:{ Size:['UK 7','UK 8','UK 9','UK 10'], Colour:['Black','Brown'] },
+    description:'Genuine leather formal shoes — office aur formal occasions ke liye.',
+    specs:{ 'Material':'Genuine Leather', 'Sole':'TPR', 'Occasion':'Formal' } },
+  { id:4, name:'Smartphone X12', brand:'Novatel', category:'Mobile', price:16999, mrp:21999, rating:4.2, ratingCount:3400, badge:'deal', stock:60, deliveryDays:2,
+    variants:{ Storage:['128GB','256GB'], Colour:['Midnight Black','Silver'] },
+    description:'6.5" AMOLED display, 5000mAh battery, triple camera setup — daily use ke liye smooth performance.',
+    specs:{ 'Display':'6.5" AMOLED', 'Battery':'5000mAh', 'Camera':'50MP + 8MP + 2MP', 'RAM':'8GB' } },
+  { id:5, name:'Smartphone Lite', brand:'Novatel', category:'Mobile', price:9999, mrp:12999, rating:3.9, ratingCount:1520, badge:'new', stock:80, deliveryDays:2,
+    variants:{ Storage:['64GB','128GB'], Colour:['Blue','Black'] },
+    description:'Budget-friendly smartphone with solid battery life aur decent camera.',
+    specs:{ 'Display':'6.1" IPS LCD', 'Battery':'4500mAh', 'RAM':'4GB' } },
+  { id:6, name:'Gaming Phone Z', brand:'Pulsecore', category:'Mobile', price:27999, mrp:32999, rating:4.6, ratingCount:760, badge:'bestseller', stock:18, deliveryDays:3,
+    variants:{ Storage:['256GB','512GB'], Colour:['Phantom Black'] },
+    description:'High refresh-rate display aur powerful chipset — heavy gaming ke liye banaya gaya.',
+    specs:{ 'Display':'144Hz AMOLED', 'Chipset':'Octa-core 3.2GHz', 'RAM':'12GB' } },
+  { id:7, name:'Coding Laptop 14', brand:'ByteForge', category:'Laptop', price:54999, mrp:64999, rating:4.4, ratingCount:980, badge:'deal', stock:22, deliveryDays:4,
+    variants:{ RAM:['8GB','16GB'], Storage:['512GB SSD'] },
+    description:'Developers ke liye banaya gaya laptop — fast SSD, achhi battery life, halka wazan.',
+    specs:{ 'Processor':'Octa-core', 'Display':'14" FHD', 'Battery':'Up to 10 hrs' } },
+  { id:8, name:'Ultrabook Air', brand:'ByteForge', category:'Laptop', price:59999, mrp:69999, rating:4.3, ratingCount:430, badge:'new', stock:14, deliveryDays:5,
+    variants:{ RAM:['8GB','16GB'], Colour:['Silver','Space Grey'] },
+    description:'Ultra-thin aur halka laptop, travel-friendly, poore din ki battery.',
+    specs:{ 'Weight':'1.2kg', 'Display':'13.6" Retina-class' } },
+  { id:9, name:'Gaming Laptop RTX', brand:'Ferrotech', category:'Laptop', price:89999, mrp:99999, rating:4.7, ratingCount:210, badge:'bestseller', stock:8, deliveryDays:6,
+    variants:{ RAM:['16GB','32GB'], Storage:['1TB SSD'] },
+    description:'High-end GPU ke saath, heavy gaming aur editing ke liye designed.',
+    specs:{ 'GPU':'Dedicated 8GB', 'Display':'165Hz FHD' } },
+  { id:10, name:'Wireless Earbuds Pro', brand:'Sonique', category:'Electronics', price:1999, mrp:3499, rating:4.1, ratingCount:5600, badge:'deal', stock:120, deliveryDays:2,
+    variants:{ Colour:['Black','White'] },
+    description:'Active noise cancellation ke saath wireless earbuds, 30 hours battery backup.',
+    specs:{ 'Battery':'30 hrs (with case)', 'ANC':'Yes', 'Bluetooth':'5.3' } },
+  { id:11, name:'Smartwatch Fit', brand:'Pulsecore', category:'Electronics', price:2499, mrp:3999, rating:4.0, ratingCount:2100, badge:'new', stock:55, deliveryDays:3,
+    variants:{ Colour:['Black','Rose Gold'] },
+    description:'Fitness tracking, heart-rate monitor aur 7-day battery life waala smartwatch.',
+    specs:{ 'Display':'1.4" AMOLED', 'Battery':'7 days', 'Water resistance':'IP68' } },
+  { id:12, name:'Bluetooth Speaker', brand:'Sonique', category:'Electronics', price:1499, mrp:2299, rating:4.2, ratingCount:1800, badge:'', stock:70, deliveryDays:3,
+    variants:{ Colour:['Black','Blue'] },
+    description:'Portable Bluetooth speaker, deep bass, 12 hours playtime.',
+    specs:{ 'Battery':'12 hrs', 'Water resistance':'IPX7' } },
+  { id:13, name:"Men's Cotton Shirt", brand:'Weavehouse', category:'Fashion', price:699, mrp:1199, rating:4.0, ratingCount:340, badge:'', stock:100, deliveryDays:4,
+    variants:{ Size:['S','M','L','XL'], Colour:['White','Blue'] },
+    description:'100% cotton casual shirt, roz pehnane ke liye comfortable.',
+    specs:{ 'Material':'100% Cotton', 'Fit':'Regular' } },
+  { id:14, name:"Women's Kurti", brand:'Weavehouse', category:'Fashion', price:899, mrp:1499, rating:4.3, ratingCount:560, badge:'deal', stock:65, deliveryDays:4,
+    variants:{ Size:['S','M','L','XL'], Colour:['Maroon','Green'] },
+    description:'Printed cotton kurti, ethnic aur daily wear dono ke liye perfect.',
+    specs:{ 'Material':'Cotton blend', 'Sleeve':'3/4th' } },
+  { id:15, name:'Denim Jacket', brand:'Urbanwear', category:'Fashion', price:1599, mrp:2499, rating:4.1, ratingCount:120, badge:'new', stock:30, deliveryDays:5,
+    variants:{ Size:['M','L','XL'], Colour:['Blue'] },
+    description:'Classic denim jacket, casual outings ke liye stylish layer.',
+    specs:{ 'Material':'Denim', 'Fit':'Regular' } },
+  { id:16, name:'Non-stick Cookware Set', brand:'Homigo', category:'Home', price:1899, mrp:2999, rating:4.4, ratingCount:890, badge:'bestseller', stock:35, deliveryDays:4,
+    variants:{ Pieces:['3-piece','5-piece'] },
+    description:'Non-stick cookware set jo roz ke khana banane ke liye kaafi hai.',
+    specs:{ 'Material':'Aluminium + Non-stick coating', 'Induction compatible':'Yes' } },
+  { id:17, name:'Electric Kettle', brand:'Homigo', category:'Home', price:799, mrp:1299, rating:4.0, ratingCount:430, badge:'', stock:50, deliveryDays:3,
+    variants:{ Colour:['Black','Red'] },
+    description:'1.5L electric kettle, chai/coffee jaldi banane ke liye.',
+    specs:{ 'Capacity':'1.5L', 'Auto shut-off':'Yes' } },
+  { id:18, name:'Study Table Lamp', brand:'Lumeo', category:'Home', price:599, mrp:999, rating:4.2, ratingCount:310, badge:'deal', stock:60, deliveryDays:3,
+    variants:{ Colour:['White','Black'] },
+    description:'Adjustable LED study lamp, eye-friendly light ke saath.',
+    specs:{ 'Light type':'LED', 'Adjustable':'Yes' } },
+];
+/* demo reviews + Q&A, shared pool so every product has some content */
+const DEMO_REVIEWS = [
+  { user:'Rohit S.', rating:5, text:'Bahut acchi quality hai, price ke hisaab se best.', date:'2026-06-10' },
+  { user:'Priya M.', rating:4, text:'Achha product hai, delivery bhi time par hui.', date:'2026-06-02' },
+  { user:'Ankit V.', rating:3, text:'Theek-thaak hai, expect kiya tha thoda better milega.', date:'2026-05-20' },
+];
+const DEMO_QNA = [
+  { q:'Kya isme warranty milegi?', a:'Haan, 1 saal ki manufacturer warranty milti hai.' },
+  { q:'COD available hai kya?', a:'Haan, Cash on Delivery checkout par option available hai.' },
+];
+
+/* =====================================================================
+   SELLER-LISTED PRODUCTS (local/demo — see header note)
+   ===================================================================== */
+let sellerProfile = Local.get('sellerProfile', null); // {email, mobile, pincode, verified}
+let sellerProducts = Local.get('sellerProducts', []); // [{id, name, brand, category, price, mrp, ..., sellerEmail, customImage}]
+
+function allProducts(){ return [...PRODUCTS, ...sellerProducts]; }
+function getProductById(id){ return allProducts().find(p => String(p.id) === String(id)); }
+function productImage(p, seed, w=500, h=500){ return p && p.customImage ? p.customImage : imgFor(seed, w, h); }
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+let currentUser = Local.get('user', null);       // {name,email,mobile}
+let authToken = localStorage.getItem('dk_token');
+let cart = Local.get('cart', []);                // [{productId, qty, variant:{}}]
+let savedForLater = Local.get('savedForLater', []);
+let wishlist = Local.get('wishlist', []);        // [productId]
+let recentlyViewed = Local.get('recentlyViewed', []); // [productId]
+let orders = Local.get('orders', []);            // [{id, items, address, payment, totals, status, createdAt, escrow, deliveryToken, escrowStatus, buyerConfirmed}]
+let selectedPincode = Local.get('pincode', '');
+let appliedCoupon = null;
+
+let currentSearchQuery = '';
+let currentSearchCategory = '';
+let activeFilters = { categories: new Set(), brands: new Set(), ratings: new Set(), priceMin:null, priceMax:null, inStockOnly:false };
+let currentSort = 'relevance';
+
+let viewingProduct = null;
+let pendingOrderDraft = null; // built at checkout, confirmed after OTP
+let sellerOtpSent = null;     // the mobile number an OTP was "sent" to, during onboarding
+
+const CATEGORIES = ['Shoes','Mobile','Laptop','Electronics','Fashion','Home'];
+const COUPONS = {
+  SAVE10: { type:'percent', value:10, max:300, label:'10% off (max ₹300)' },
+  FLAT50: { type:'flat', value:50, minOrder:500, label:'Flat ₹50 off' },
+};
+
+/* =====================================================================
+   ELEMENT REFS
+   ===================================================================== */
+const views = {
+  home: $('viewHome'), search: $('viewSearch'), product: $('viewProduct'),
+  cart: $('viewCart'), checkout: $('viewCheckout'), otp: $('viewOtpConfirm'),
+  success: $('viewOrderSuccess'), orders: $('viewOrders'), wishlist: $('viewWishlist'),
+  sellerDashboard: $('viewSellerDashboard'),
+};
+function showView(name){
+  Object.values(views).forEach(v => v && v.classList.add('hidden'));
+  if(views[name]) views[name].classList.remove('hidden');
+  window.scrollTo({ top:0, behavior:'instant' in window ? 'instant' : 'auto' });
+}
+
+/* =====================================================================
+   TOPBAR / NAV
+   ===================================================================== */
+function renderCategoryRail(){
+  const rail = $('categoryRail');
+  rail.innerHTML = CATEGORIES.map(c => `<button class="category-pill" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('');
+  rail.querySelectorAll('.category-pill').forEach(btn => on(btn, 'click', () => {
+    currentSearchCategory = btn.dataset.cat;
+    currentSearchQuery = '';
+    activeFilters = { categories:new Set([btn.dataset.cat]), brands:new Set(), ratings:new Set(), priceMin:null, priceMax:null, inStockOnly:false };
+    currentSort = 'relevance';
+    showView('search');
+    renderSearchView();
+  }));
+}
+function refreshTopbar(){
+  $('accountLabel').textContent = currentUser ? currentUser.name.split(' ')[0] : 'Login';
+  $('pinValue').textContent = selectedPincode || 'Pincode daalein';
+  const cartCount = cart.reduce((a,c)=>a+c.qty,0);
+  $('cartBadge').textContent = cartCount;
+  $('cartBadge').classList.toggle('hidden', cartCount === 0);
+  $('wishlistBadge').textContent = wishlist.length;
+  $('wishlistBadge').classList.toggle('hidden', wishlist.length === 0);
+}
+on($('brandHome'), 'click', () => { showView('home'); });
+on($('accountBtn'), 'click', () => { currentUser ? openAccountMenu() : openAuthModal(); });
+on($('ordersBtn'), 'click', () => { showView('orders'); renderOrdersView(); });
+on($('wishlistBtn'), 'click', () => { showView('wishlist'); renderWishlistView(); });
+on($('cartBtn'), 'click', () => { showView('cart'); renderCartView(); });
+function openAccountMenu(){
+  if(confirm(`Logged in as ${currentUser.name} (${currentUser.email}).\nLogout karna hai?`)) doLogout();
+}
+function doLogout(){
+  currentUser = null; authToken = null;
+  localStorage.removeItem('dk_token');
+  Local.set('user', null);
+  refreshTopbar();
+}
+
+/* ---- Hamburger menu dropdown: Dashboard / Track your product ---- */
+on($('navMenuBtn'), 'click', (e) => {
+  e.stopPropagation();
+  $('mobileMenuDropdown').classList.toggle('hidden');
+});
+on($('menuDashboardBtn'), 'click', () => {
+  $('mobileMenuDropdown').classList.add('hidden');
+  showView('sellerDashboard');
+  renderSellerDashboard();
+});
+on($('menuTrackBtn'), 'click', () => {
+  $('mobileMenuDropdown').classList.add('hidden');
+  showView('orders');
+  renderOrdersView();
+});
+document.addEventListener('click', (e) => {
+  const dd = $('mobileMenuDropdown');
+  if(dd && !dd.classList.contains('hidden') && !e.target.closest('.menu-anchor')) dd.classList.add('hidden');
+});
+
+/* Pincode chip — simple demo prompt */
+on($('pincodeChip'), 'click', () => {
+  const pin = prompt('Apna 6-digit pincode daalein:', selectedPincode || '');
+  if(pin && /^\d{6}$/.test(pin)){ selectedPincode = pin; Local.set('pincode', pin); refreshTopbar(); }
+});
+
+/* =====================================================================
+   SEARCH
+   ===================================================================== */
+on($('searchForm'), 'submit', e => {
+  e.preventDefault();
+  currentSearchQuery = $('searchInput').value.trim();
+  currentSearchCategory = $('searchCategory').value;
+  activeFilters = { categories:new Set(currentSearchCategory?[currentSearchCategory]:[]), brands:new Set(), ratings:new Set(), priceMin:null, priceMax:null, inStockOnly:false };
+  showView('search');
+  renderSearchView();
+});
+on($('voiceSearchBtn'), 'click', () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ alert('Is browser me voice search support nahi hai.'); return; }
+  const rec = new SR();
+  rec.lang = 'hi-IN';
+  rec.onresult = (e) => { $('searchInput').value = e.results[0][0].transcript; $('searchForm').requestSubmit(); };
+  rec.onerror = () => alert('Voice search sun nahi paaya, dobara try karein.');
+  rec.start();
+});
+on($('imageSearchBtn'), 'click', () => {
+  alert('Image se search abhi demo/coming-soon hai — is phase me sirf text search kaam karta hai.');
+});
+
+function renderSearchView(){
+  // populate filter panels
+  const brands = Array.from(new Set(allProducts().map(p=>p.brand))).sort();
+  $('filterCategory').innerHTML = CATEGORIES.map(c => `
+    <label class="filter-check"><input type="checkbox" value="${escapeHtml(c)}" ${activeFilters.categories.has(c)?'checked':''} class="fcat"> ${escapeHtml(c)}</label>`).join('');
+  $('filterBrand').innerHTML = brands.map(b => `
+    <label class="filter-check"><input type="checkbox" value="${escapeHtml(b)}" ${activeFilters.brands.has(b)?'checked':''} class="fbrand"> ${escapeHtml(b)}</label>`).join('');
+  $('filterRating').innerHTML = [4,3,2].map(r => `
+    <label class="filter-check"><input type="checkbox" value="${r}" ${activeFilters.ratings.has(r)?'checked':''} class="frating"> ${r}★ &amp; ऊपर</label>`).join('');
+  $('filterPriceMin').value = activeFilters.priceMin ?? '';
+  $('filterPriceMax').value = activeFilters.priceMax ?? '';
+  $('filterInStock').checked = activeFilters.inStockOnly;
+  $('sortSelect').value = currentSort;
+
+  document.querySelectorAll('.fcat').forEach(cb => on(cb,'change', () => { cb.checked ? activeFilters.categories.add(cb.value) : activeFilters.categories.delete(cb.value); renderSearchResults(); }));
+  document.querySelectorAll('.fbrand').forEach(cb => on(cb,'change', () => { cb.checked ? activeFilters.brands.add(cb.value) : activeFilters.brands.delete(cb.value); renderSearchResults(); }));
+  document.querySelectorAll('.frating').forEach(cb => on(cb,'change', () => { cb.checked ? activeFilters.ratings.add(Number(cb.value)) : activeFilters.ratings.delete(Number(cb.value)); renderSearchResults(); }));
+
+  renderSearchResults();
+}
+on($('filterPriceMin'), 'input', () => { activeFilters.priceMin = $('filterPriceMin').value ? Number($('filterPriceMin').value) : null; renderSearchResults(); });
+on($('filterPriceMax'), 'input', () => { activeFilters.priceMax = $('filterPriceMax').value ? Number($('filterPriceMax').value) : null; renderSearchResults(); });
+on($('filterInStock'), 'change', () => { activeFilters.inStockOnly = $('filterInStock').checked; renderSearchResults(); });
+on($('sortSelect'), 'change', () => { currentSort = $('sortSelect').value; renderSearchResults(); });
+on($('clearFiltersBtn'), 'click', () => { activeFilters = { categories:new Set(), brands:new Set(), ratings:new Set(), priceMin:null, priceMax:null, inStockOnly:false }; renderSearchView(); });
+
+function matchesSearch(p){
+  const q = currentSearchQuery.toLowerCase();
+  if(q && !(p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))) return false;
+  if(activeFilters.categories.size && !activeFilters.categories.has(p.category)) return false;
+  if(activeFilters.brands.size && !activeFilters.brands.has(p.brand)) return false;
+  if(activeFilters.ratings.size && !Array.from(activeFilters.ratings).some(r => p.rating >= r)) return false;
+  if(activeFilters.priceMin != null && p.price < activeFilters.priceMin) return false;
+  if(activeFilters.priceMax != null && p.price > activeFilters.priceMax) return false;
+  if(activeFilters.inStockOnly && p.stock <= 0) return false;
+  return true;
+}
+function sortProducts(list){
+  const arr = [...list];
+  if(currentSort === 'price_low') arr.sort((a,b)=>a.price-b.price);
+  else if(currentSort === 'price_high') arr.sort((a,b)=>b.price-a.price);
+  else if(currentSort === 'rating') arr.sort((a,b)=>b.rating-a.rating);
+  else if(currentSort === 'newest') arr.sort((a,b)=> (b.badge==='new'?1:0) - (a.badge==='new'?1:0) || String(b.id).localeCompare(String(a.id)));
+  else if(currentSort === 'popularity') arr.sort((a,b)=>b.ratingCount-a.ratingCount);
+  return arr;
+}
+function renderSearchResults(){
+  const results = sortProducts(allProducts().filter(matchesSearch));
+  $('resultsCount').textContent = `${results.length} products mile`;
+  $('searchResultsGrid').innerHTML = '';
+  if(!results.length){ $('searchResultsGrid').innerHTML = `<div class="empty-state">Koi product nahi mila. Filters badal kar dekhein.</div>`; return; }
+  results.forEach(p => $('searchResultsGrid').appendChild(buildProductCard(p)));
+}
+
+/* =====================================================================
+   PRODUCT CARD
+   ===================================================================== */
+function buildProductCard(p){
+  const discountPct = p.mrp > p.price ? Math.round((1 - p.price/p.mrp) * 100) : 0;
+  const inWishlist = wishlist.includes(p.id);
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  const badgeLabel = p.badge === 'deal' ? 'DEAL' : p.badge === 'bestseller' ? 'BESTSELLER' : p.badge === 'seller' ? 'SELLER' : p.badge === 'new' ? 'NEW' : '';
+  card.innerHTML = `
+    <div class="pc-img-wrap">
+      ${p.badge ? `<span class="pc-badge ${p.badge}">${badgeLabel}</span>` : ''}
+      <button class="pc-wishlist-btn ${inWishlist?'active':''}" data-wish="${p.id}">${inWishlist ? '♥' : '♡'}</button>
+      <img src="${productImage(p, p.name, 400, 400)}" alt="${escapeHtml(p.name)}" loading="lazy">
+    </div>
+    <div class="pc-body">
+      <span class="pc-brand">${escapeHtml(p.brand)}</span>
+      <span class="pc-name">${escapeHtml(p.name)}</span>
+      <span class="pc-rating"><b>${p.rating || 0}★</b>${(p.ratingCount||0).toLocaleString('en-IN')}</span>
+      <div class="pc-price-row">
+        <span class="pc-price mono">${money(p.price)}</span>
+        ${p.mrp > p.price ? `<span class="pc-mrp mono">${money(p.mrp)}</span><span class="pc-discount">${discountPct}% off</span>` : ''}
+      </div>
+    </div>
+    <button class="pc-add-btn" data-add="${p.id}">Add to Cart</button>
+  `;
+  card.addEventListener('click', (e) => { if(e.target.closest('[data-wish],[data-add]')) return; openProductPage(p.id); });
+  card.querySelector('[data-wish]').addEventListener('click', (e) => { e.stopPropagation(); toggleWishlist(p.id); card.querySelector('.pc-wishlist-btn').classList.toggle('active'); card.querySelector('.pc-wishlist-btn').textContent = wishlist.includes(p.id) ? '♥' : '♡'; });
+  card.querySelector('[data-add]').addEventListener('click', (e) => { e.stopPropagation(); addToCart(p.id, defaultVariant(p), 1); alert(`${p.name} cart me daal diya ✓`); });
+  return card;
+}
+function defaultVariant(p){
+  const v = {};
+  Object.keys(p.variants||{}).forEach(k => v[k] = p.variants[k][0]);
+  return v;
+}
+
+/* =====================================================================
+   WISHLIST
+   ===================================================================== */
+function toggleWishlist(id){
+  const idx = wishlist.indexOf(id);
+  if(idx === -1) wishlist.push(id); else wishlist.splice(idx,1);
+  Local.set('wishlist', wishlist);
+  refreshTopbar();
+}
+function renderWishlistView(){
+  const grid = $('wishlistGrid');
+  grid.innerHTML = '';
+  const items = wishlist.map(getProductById).filter(Boolean);
+  $('wishlistEmptyState').classList.toggle('hidden', items.length>0);
+  items.forEach(p => grid.appendChild(buildProductCard(p)));
+}
+
+/* =====================================================================
+   PRODUCT PAGE
+   ===================================================================== */
+function openProductPage(id){
+  const p = getProductById(id);
+  if(!p) return;
+  viewingProduct = { product: p, variant: defaultVariant(p), imgIndex: 0 };
+
+  // recently viewed
+  recentlyViewed = [id, ...recentlyViewed.filter(x=>x!==id)].slice(0, 10);
+  Local.set('recentlyViewed', recentlyViewed);
+
+  renderProductPage();
+  showView('product');
+}
+function renderProductPage(){
+  const { product: p, variant } = viewingProduct;
+  const seeds = p.customImage ? [p.customImage, p.customImage, p.customImage] : [p.name, p.name+'-2', p.name+'-3'];
+  $('galleryMainImg').src = p.customImage ? p.customImage : imgFor(seeds[viewingProduct.imgIndex], 600, 600);
+  $('galleryThumbs').innerHTML = seeds.map((s,i)=>`<img src="${p.customImage ? p.customImage : imgFor(s,120,120)}" class="${i===viewingProduct.imgIndex?'active':''}" data-idx="${i}">`).join('');
+  $('galleryThumbs').querySelectorAll('img').forEach(img => on(img,'click', () => { viewingProduct.imgIndex = Number(img.dataset.idx); renderProductPage(); }));
+
+  $('pdBrand').textContent = p.brand;
+  $('pdName').textContent = p.name;
+  $('pdRatingChip').textContent = `${p.rating || 0}★`;
+  $('pdRatingCount').textContent = `${(p.ratingCount||0).toLocaleString('en-IN')} ratings`;
+  $('pdMrp').textContent = money(p.mrp);
+  $('pdPrice').textContent = money(p.price);
+  $('pdDiscount').textContent = p.mrp > p.price ? (money(p.mrp - p.price) + ' (' + Math.round((1-p.price/p.mrp)*100) + '%)') : money(0);
+  $('pdSeller').textContent = p.isSellerProduct ? `Dukaan Seller (${p.sellerEmail})` : 'Dukaan Retail (Verified Seller)';
+  $('pdEscrowNote').classList.toggle('hidden', !p.isSellerProduct);
+
+  $('pdVariants').innerHTML = Object.entries(p.variants||{}).map(([label, opts]) => `
+    <div class="variant-group">
+      <span class="variant-label">${escapeHtml(label)}</span>
+      <div class="variant-opts">
+        ${opts.map(o => `<button class="variant-opt ${variant[label]===o?'active':''}" data-vgroup="${escapeHtml(label)}" data-vopt="${escapeHtml(o)}">${escapeHtml(o)}</button>`).join('')}
+      </div>
+    </div>`).join('');
+  $('pdVariants').querySelectorAll('.variant-opt').forEach(btn => on(btn, 'click', () => {
+    viewingProduct.variant[btn.dataset.vgroup] = btn.dataset.vopt;
+    renderProductPage();
+  }));
+
+  const inStock = p.stock > 0;
+  $('pdStock').textContent = inStock ? `In stock (${p.stock} available)` : 'Out of stock';
+  $('pdStock').className = 'stock-line ' + (inStock ? 'in-stock' : 'out-stock');
+  $('pdAddToCartBtn').disabled = !inStock;
+  $('pdBuyNowBtn').disabled = !inStock;
+
+  $('pdDeliveryLine').textContent = selectedPincode
+    ? `Pincode ${selectedPincode} par estimated delivery: ${p.deliveryDays} din me.`
+    : `Delivery estimate ke liye pincode check karein.`;
+
+  const wished = wishlist.includes(p.id);
+  $('pdWishlistBtn').textContent = wished ? '♥ Wishlist se hataayein' : '♡ Wishlist me save karein';
+
+  $('tabDescription').textContent = p.description || 'Description jaldi add ki jayegi.';
+  $('tabSpecs').innerHTML = Object.entries(p.specs||{}).map(([k,v]) => `<div class="spec-row"><span>${escapeHtml(k)}</span><span>${escapeHtml(v)}</span></div>`).join('') || '<p class="settings-hint">Abhi koi specification nahi hai.</p>';
+  $('tabReviews').innerHTML = DEMO_REVIEWS.map(r => `
+    <div class="review-item">
+      <div class="rv-head"><strong>${escapeHtml(r.user)}</strong><span class="rv-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span></div>
+      <p>${escapeHtml(r.text)}</p>
+      <span class="settings-hint">${r.date}</span>
+    </div>`).join('');
+  $('tabQna').innerHTML = DEMO_QNA.map(q => `<div class="qna-item"><div class="q">Q: ${escapeHtml(q.q)}</div><div class="a">A: ${escapeHtml(q.a)}</div></div>`).join('');
+
+  const similar = allProducts().filter(x => x.category === p.category && x.id !== p.id).slice(0,6);
+  $('similarRail').innerHTML = '';
+  similar.forEach(sp => $('similarRail').appendChild(buildProductCard(sp)));
+}
+document.querySelectorAll('.tab-btn').forEach(btn => on(btn, 'click', () => {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.add('hidden'));
+  $('tab' + btn.dataset.ptab.charAt(0).toUpperCase() + btn.dataset.ptab.slice(1)).classList.remove('hidden');
+}));
+on($('pdPincodeBtn'), 'click', () => {
+  const pin = $('pdPincodeInput').value.trim();
+  if(!/^\d{6}$/.test(pin)){ alert('Sahi 6-digit pincode daalein.'); return; }
+  selectedPincode = pin; Local.set('pincode', pin); refreshTopbar();
+  renderProductPage();
+});
+on($('pdAddToCartBtn'), 'click', () => { addToCart(viewingProduct.product.id, {...viewingProduct.variant}, 1); alert('Cart me daal diya ✓'); });
+on($('pdBuyNowBtn'), 'click', () => { addToCart(viewingProduct.product.id, {...viewingProduct.variant}, 1); showView('cart'); renderCartView(); });
+on($('pdWishlistBtn'), 'click', () => { toggleWishlist(viewingProduct.product.id); renderProductPage(); });
+on($('pdShareBtn'), 'click', () => {
+  const url = window.location.href.split('#')[0] + '#product-' + viewingProduct.product.id;
+  if(navigator.clipboard) navigator.clipboard.writeText(url).then(()=>alert('Link copy ho gaya ✓'));
+  else alert('Share link: ' + url);
+});
+
+/* =====================================================================
+   CART
+   ===================================================================== */
+function cartItemKey(productId, variant){ return productId + '::' + JSON.stringify(variant||{}); }
+function addToCart(productId, variant, qty){
+  const key = cartItemKey(productId, variant);
+  const existing = cart.find(c => cartItemKey(c.productId, c.variant) === key);
+  if(existing) existing.qty += qty;
+  else cart.push({ productId, variant, qty });
+  Local.set('cart', cart);
+  refreshTopbar();
+}
+function updateCartQty(productId, variant, delta){
+  const key = cartItemKey(productId, variant);
+  const item = cart.find(c => cartItemKey(c.productId, c.variant) === key);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) cart = cart.filter(c => cartItemKey(c.productId, c.variant) !== key);
+  Local.set('cart', cart);
+  refreshTopbar();
+  renderCartView();
+}
+function removeFromCart(productId, variant){
+  const key = cartItemKey(productId, variant);
+  cart = cart.filter(c => cartItemKey(c.productId, c.variant) !== key);
+  Local.set('cart', cart);
+  refreshTopbar();
+  renderCartView();
+}
+function saveForLater(productId, variant){
+  const key = cartItemKey(productId, variant);
+  const item = cart.find(c => cartItemKey(c.productId, c.variant) === key);
+  if(!item) return;
+  savedForLater.push(item);
+  cart = cart.filter(c => cartItemKey(c.productId, c.variant) !== key);
+  Local.set('cart', cart); Local.set('savedForLater', savedForLater);
+  refreshTopbar();
+  renderCartView();
+}
+function moveBackToCart(productId, variant){
+  const key = cartItemKey(productId, variant);
+  const item = savedForLater.find(c => cartItemKey(c.productId, c.variant) === key);
+  if(!item) return;
+  addToCart(item.productId, item.variant, item.qty);
+  savedForLater = savedForLater.filter(c => cartItemKey(c.productId, c.variant) !== key);
+  Local.set('savedForLater', savedForLater);
+  renderCartView();
+}
+
+function computeCartTotals(){
+  let subtotal = 0, mrpTotal = 0;
+  cart.forEach(c => {
+    const p = getProductById(c.productId);
+    if(!p) return;
+    subtotal += p.price * c.qty;
+    mrpTotal += p.mrp * c.qty;
+  });
+  const discount = mrpTotal - subtotal;
+  let couponDiscount = 0;
+  if(appliedCoupon){
+    const c = COUPONS[appliedCoupon];
+    if(c.type === 'percent') couponDiscount = Math.min(subtotal * c.value/100, c.max || Infinity);
+    else if(c.type === 'flat' && subtotal >= (c.minOrder||0)) couponDiscount = c.value;
+  }
+  const afterCoupon = Math.max(0, subtotal - couponDiscount);
+  const delivery = afterCoupon >= 499 || afterCoupon === 0 ? 0 : 49;
+  const tax = Math.round(afterCoupon * 0.18);
+  const total = afterCoupon + delivery + tax;
+  return { subtotal, mrpTotal, discount, couponDiscount, delivery, tax, total };
+}
+function renderPriceTag(target, totals){
+  target.innerHTML = `
+    <div class="tag-row"><span>Product Price</span><span class="mono">${money(totals.mrpTotal)}</span></div>
+    <div class="tag-row"><span>Discount</span><span class="mono">-${money(totals.discount)}</span></div>
+    ${totals.couponDiscount>0?`<div class="tag-row"><span>Coupon</span><span class="mono">-${money(totals.couponDiscount)}</span></div>`:''}
+    <div class="tag-row"><span>Delivery</span><span class="mono">${totals.delivery===0?'FREE':money(totals.delivery)}</span></div>
+    <div class="tag-row"><span>Tax (GST 18%)</span><span class="mono">${money(totals.tax)}</span></div>
+    <div class="tag-row highlight total-row"><span>Total</span><span class="mono">${money(totals.total)}</span></div>
+    <div class="tag-perf"></div>
+  `;
+}
+function renderCartView(){
+  const list = $('cartItemsList');
+  list.innerHTML = '';
+  $('cartEmptyState').classList.toggle('hidden', cart.length>0);
+
+  cart.forEach(c => {
+    const p = getProductById(c.productId);
+    if(!p) return;
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.innerHTML = `
+      <img src="${productImage(p, p.name, 160, 160)}" alt="">
+      <div class="cart-item-info">
+        <p class="ci-name">${escapeHtml(p.name)}</p>
+        <span class="ci-variant">${Object.entries(c.variant||{}).map(([k,v])=>`${escapeHtml(k)}: ${escapeHtml(v)}`).join(', ')}</span>
+        <p class="ci-price mono">${money(p.price)}</p>
+        <div class="qty-control">
+          <button data-dec>−</button>
+          <span>${c.qty}</span>
+          <button data-inc>+</button>
+        </div>
+      </div>
+      <div class="cart-item-actions">
+        <button class="text-link" data-save>Save for later</button>
+        <button class="text-link" data-remove>Remove</button>
+      </div>
+    `;
+    row.querySelector('[data-inc]').addEventListener('click', () => updateCartQty(c.productId, c.variant, 1));
+    row.querySelector('[data-dec]').addEventListener('click', () => updateCartQty(c.productId, c.variant, -1));
+    row.querySelector('[data-save]').addEventListener('click', () => saveForLater(c.productId, c.variant));
+    row.querySelector('[data-remove]').addEventListener('click', () => removeFromCart(c.productId, c.variant));
+    list.appendChild(row);
+  });
+
+  $('savedForLaterBlock').classList.toggle('hidden', savedForLater.length===0);
+  const slList = $('savedForLaterList');
+  slList.innerHTML = '';
+  savedForLater.forEach(c => {
+    const p = getProductById(c.productId);
+    if(!p) return;
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.innerHTML = `
+      <img src="${productImage(p, p.name, 160, 160)}" alt="">
+      <div class="cart-item-info"><p class="ci-name">${escapeHtml(p.name)}</p><p class="ci-price mono">${money(p.price)}</p></div>
+      <div class="cart-item-actions"><button class="text-link" data-back>Cart me wapas</button></div>
+    `;
+    row.querySelector('[data-back]').addEventListener('click', () => moveBackToCart(c.productId, c.variant));
+    slList.appendChild(row);
+  });
+
+  const totals = computeCartTotals();
+  $('sumSubtotal').textContent = money(totals.mrpTotal);
+  $('sumDiscount').textContent = '-' + money(totals.discount);
+  $('sumCoupon').textContent = '-' + money(totals.couponDiscount);
+  $('sumDelivery').textContent = totals.delivery===0 ? 'FREE' : money(totals.delivery);
+  $('sumTax').textContent = money(totals.tax);
+  $('sumTotal').textContent = money(totals.total);
+}
+on($('applyCouponBtn'), 'click', () => {
+  const code = $('couponInput').value.trim().toUpperCase();
+  if(!code){ return; }
+  if(!COUPONS[code]){ $('couponMsg').textContent = 'Ye coupon valid nahi hai.'; $('couponMsg').style.color = 'var(--danger)'; return; }
+  appliedCoupon = code;
+  $('couponMsg').textContent = `Coupon lag gaya: ${COUPONS[code].label}`;
+  $('couponMsg').style.color = 'var(--success)';
+  renderCartView();
+});
+on($('checkoutBtn'), 'click', () => {
+  if(!cart.length){ alert('Cart khali hai.'); return; }
+  if(!currentUser){ openAuthModal(); return; }
+  showView('checkout');
+  renderCheckoutView();
+});
+
+/* =====================================================================
+   CHECKOUT + PER-ORDER OTP CONFIRM (demo)
+   ===================================================================== */
+function renderCheckoutView(){
+  if(currentUser){
+    $('addrName').value = currentUser.name || '';
+    $('addrMobile').value = currentUser.mobile || '';
+  }
+  const totals = computeCartTotals();
+  renderPriceTag($('checkoutSummaryTag'), totals);
+}
+on($('placeOrderBtn'), 'click', () => {
+  const name = $('addrName').value.trim();
+  const mobile = $('addrMobile').value.trim();
+  const line = $('addrLine').value.trim();
+  const city = $('addrCity').value.trim();
+  const pincode = $('addrPincode').value.trim();
+  if(!name || !/^\d{10}$/.test(mobile) || !line || !city || !/^\d{6}$/.test(pincode)){
+    alert('Kripya address form sahi se bharein (10-digit mobile, 6-digit pincode).');
+    return;
+  }
+  const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
+  const totals = computeCartTotals();
+  const cartItems = cart.map(c => ({ productId:c.productId, name:getProductById(c.productId)?.name, qty:c.qty, price:getProductById(c.productId)?.price, variant:c.variant }));
+  const hasSellerItem = cart.some(c => { const p = getProductById(c.productId); return p && p.isSellerProduct; });
+  pendingOrderDraft = {
+    id: 'ORD' + Date.now(),
+    items: cartItems,
+    address: { name, mobile, line, city, pincode },
+    payment: payMethod,
+    totals,
+    createdAt: new Date().toISOString(),
+    escrow: hasSellerItem,          // true => payment held by Dukaan until buyer confirms with token
+  };
+  showView('otp');
+  $('otpConfirmInput').value = '';
+  $('otpConfirmMsg').textContent = `OTP ${mobile} par bheja jaayega (demo mode me hamesha 123456 kaam karega).`;
+});
+on($('otpConfirmBtn'), 'click', () => {
+  const entered = $('otpConfirmInput').value.trim();
+  if(entered !== '123456'){
+    $('otpConfirmMsg').textContent = 'Galat OTP. Demo OTP hai: 123456';
+    $('otpConfirmMsg').style.color = 'var(--danger)';
+    return;
+  }
+  const deliveryToken = randomDigits(4);
+  const order = {
+    ...pendingOrderDraft,
+    status: 'Order Placed',
+    deliveryToken,
+    escrowStatus: pendingOrderDraft.escrow ? 'held' : null,
+    buyerConfirmed: false,
+  };
+  orders.unshift(order);
+  Local.set('orders', orders);
+  cart = []; Local.set('cart', cart);
+  appliedCoupon = null;
+  refreshTopbar();
+  $('successOrderId').textContent = order.id;
+  $('successTokenBlock').classList.remove('hidden');
+  $('successTokenValue').textContent = deliveryToken;
+  showView('success');
+});
+on($('goToOrdersBtn'), 'click', () => { showView('orders'); renderOrdersView(); });
+on($('goHomeBtn'), 'click', () => { showView('home'); });
+
+/* =====================================================================
+   ORDERS (demo tracking) + delivery-token / escrow confirmation
+   ===================================================================== */
+const ORDER_STEPS = ['Order Placed','Payment Confirmed','Processing','Packed','Shipped','Out for Delivery','Delivered'];
+function renderOrdersView(){
+  const list = $('ordersList');
+  list.innerHTML = '';
+  $('ordersEmptyState').classList.toggle('hidden', orders.length>0);
+  orders.forEach(o => {
+    const currentStepIdx = ORDER_STEPS.indexOf(o.status);
+    const card = document.createElement('div');
+    card.className = 'order-card';
+    const escrowPill = o.escrow ? `<span class="escrow-pill ${o.escrowStatus}">${o.escrowStatus === 'released' ? '🔓 Payment seller ko release ho gayi' : '🔒 Payment Dukaan ke paas surakshit'}</span>` : '';
+    const confirmRow = (!o.buyerConfirmed) ? `
+      <div class="escrow-confirm-row">
+        <input type="text" maxlength="4" placeholder="4-digit token" data-token-input="${o.id}">
+        <button class="btn-outline" data-confirm-order="${o.id}">Delivery confirm karein</button>
+      </div>
+      <p class="settings-hint" data-token-msg="${o.id}"></p>
+    ` : `<p class="settings-hint">✓ Aapne delivery confirm kar di hai.</p>`;
+    card.innerHTML = `
+      <div class="order-card-head">
+        <div><strong class="mono">${escapeHtml(o.id)}</strong><br><span class="settings-hint">${new Date(o.createdAt).toLocaleString()}</span></div>
+        <span class="order-status-badge">${escapeHtml(o.status)}</span>
+      </div>
+      <div class="order-items-preview">${o.items.map(i=>`${escapeHtml(i.name)} × ${i.qty}`).join(', ')}</div>
+      <p class="mono">Total: ${money(o.totals.total)}</p>
+      <div class="order-track">
+        ${ORDER_STEPS.map((s,i)=>`<span class="track-step ${i<=currentStepIdx?'done':''}">${escapeHtml(s)}</span>`).join('')}
+      </div>
+      ${escrowPill}
+      ${confirmRow}
+    `;
+    const confirmBtn = card.querySelector(`[data-confirm-order="${o.id}"]`);
+    if(confirmBtn){
+      on(confirmBtn, 'click', () => {
+        const input = card.querySelector(`[data-token-input="${o.id}"]`);
+        const msg = card.querySelector(`[data-token-msg="${o.id}"]`);
+        const entered = (input.value || '').trim();
+        if(entered !== o.deliveryToken){
+          msg.textContent = 'Galat token. Ye token order-success page par mila tha.';
+          msg.style.color = 'var(--danger)';
+          return;
+        }
+        o.buyerConfirmed = true;
+        o.status = 'Delivered';
+        if(o.escrow) o.escrowStatus = 'released';
+        Local.set('orders', orders);
+        renderOrdersView();
+        renderSellerDashboard();
+      });
+    }
+    list.appendChild(card);
+  });
+}
+
+/* =====================================================================
+   HOME PAGE RAILS
+   ===================================================================== */
+function renderHomeRails(){
+  $('dealsRail').innerHTML = ''; $('bestSellersRail').innerHTML = ''; $('newArrivalsRail').innerHTML = ''; $('recommendedRail').innerHTML = '';
+  PRODUCTS.filter(p=>p.badge==='deal').forEach(p => $('dealsRail').appendChild(buildProductCard(p)));
+  PRODUCTS.filter(p=>p.badge==='bestseller').forEach(p => $('bestSellersRail').appendChild(buildProductCard(p)));
+  PRODUCTS.filter(p=>p.badge==='new').forEach(p => $('newArrivalsRail').appendChild(buildProductCard(p)));
+  [...PRODUCTS].sort(()=>0.5-Math.random()).slice(0,8).forEach(p => $('recommendedRail').appendChild(buildProductCard(p)));
+
+  $('sellerRailSection').classList.toggle('hidden', sellerProducts.length===0);
+  $('sellerProductsRail').innerHTML = '';
+  sellerProducts.forEach(p => $('sellerProductsRail').appendChild(buildProductCard(p)));
+
+  const rv = recentlyViewed.map(getProductById).filter(Boolean);
+  $('recentlyViewedSection').classList.toggle('hidden', rv.length===0);
+  $('recentlyViewedRail').innerHTML = '';
+  rv.forEach(p => $('recentlyViewedRail').appendChild(buildProductCard(p)));
+}
+document.querySelectorAll('[data-scroll]').forEach(btn => on(btn, 'click', () => {
+  document.getElementById(btn.dataset.scroll)?.scrollIntoView({ behavior:'smooth' });
+}));
+
+/* deals countdown — purely cosmetic, resets daily at midnight (demo) */
+function startDealsCountdown(){
+  function tick(){
+    const now = new Date();
+    const midnight = new Date(now); midnight.setHours(24,0,0,0);
+    const diff = midnight - now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,'0');
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+    $('dealsCountdown').textContent = `khatam hone me ${h}:${m}:${s}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+/* =====================================================================
+   AUTH MODAL — wired to your existing Node backend (email OTP signup)
+   ===================================================================== */
+function openAuthModal(){ $('authModal').classList.remove('hidden'); }
+on($('authCloseBtn'), 'click', () => $('authModal').classList.add('hidden'));
+on($('authModal'), 'click', e => { if(e.target === $('authModal')) $('authModal').classList.add('hidden'); });
+document.querySelectorAll('.auth-tab').forEach(tab => on(tab, 'click', () => {
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  $('loginForm').classList.toggle('hidden', tab.dataset.atab !== 'login');
+  $('signupForm').classList.toggle('hidden', tab.dataset.atab !== 'signup');
+}));
+
+on($('loginForm'), 'submit', async e => {
+  e.preventDefault();
+  const email = $('loginEmailInput').value.trim().toLowerCase();
+  const password = $('loginPasswordInput').value;
+  $('loginMsg').textContent = 'Login ho raha hai…';
+  try{
+    const res = await fetch(ENDPOINTS.login, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password }) });
+    const data = await res.json();
+    if(!res.ok || data.success === false){ $('loginMsg').textContent = data.message || 'Email ya password galat hai.'; return; }
+    authToken = data.token;
+    localStorage.setItem('dk_token', authToken);
+    currentUser = { name: data.user.name, email: data.user.email, mobile: currentUser?.mobile || '' };
+    Local.set('user', currentUser);
+    $('authModal').classList.add('hidden');
+    refreshTopbar();
+  }catch(err){
+    $('loginMsg').textContent = 'Server se connect nahi ho paaya. Backend chal raha hai kya?';
+  }
+});
+
+on($('sendOtpBtn'), 'click', async () => {
+  const email = $('signupEmail').value.trim().toLowerCase();
+  if(!email){ $('signupMsg').textContent = 'Pehle email daalein.'; return; }
+  $('signupMsg').textContent = 'OTP bheja ja raha hai…';
+  try{
+    const res = await fetch(ENDPOINTS.sendOtp, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }) });
+    const data = await res.json();
+    if(!res.ok || data.success === false){ $('signupMsg').textContent = data.message || 'OTP bhejne me dikkat aayi.'; return; }
+    $('signupMsg').textContent = 'OTP aapke email par bhej diya gaya hai.';
+    $('signupOtpRow').classList.remove('hidden');
+    $('verifySignupBtn').classList.remove('hidden');
+    $('sendOtpBtn').classList.add('hidden');
+  }catch(err){
+    $('signupMsg').textContent = 'Server se connect nahi ho paaya. Backend chal raha hai kya?';
+  }
+});
+
+on($('signupForm'), 'submit', async e => {
+  e.preventDefault();
+  const name = $('signupName').value.trim();
+  const email = $('signupEmail').value.trim().toLowerCase();
+  const mobile = $('signupMobile').value.trim();
+  const password = $('signupPassword').value;
+  const otp = $('signupOtpInput').value.trim();
+  if(!/^\d{10}$/.test(mobile)){ $('signupMsg').textContent = 'Sahi 10-digit mobile number daalein.'; return; }
+  $('signupMsg').textContent = 'Account banaya ja raha hai…';
+  try{
+    const res = await fetch(ENDPOINTS.signup, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name, email, password, otp }) });
+    const data = await res.json();
+    if(!res.ok || data.success === false){ $('signupMsg').textContent = data.message || 'Account nahi ban paaya.'; return; }
+    // Mobile is stored locally only for now — backend signup route doesn't
+    // accept/persist it yet (Phase 2 TODO, see header note).
+    currentUser = { name, email, mobile };
+    Local.set('user', currentUser);
+    $('signupMsg').textContent = 'Account ban gaya ✓ Ab login karein.';
+    document.querySelector('.auth-tab[data-atab="login"]').click();
+    $('loginEmailInput').value = email;
+  }catch(err){
+    $('signupMsg').textContent = 'Server se connect nahi ho paaya. Backend chal raha hai kya?';
+  }
+});
+
+/* =====================================================================
+   SELLER ONBOARDING (email + mobile OTP + pickup pincode) — demo/local
+   ===================================================================== */
+function openSellerAuthModal(){ $('sellerAuthModal').classList.remove('hidden'); }
+on($('sellerAuthCloseBtn'), 'click', () => $('sellerAuthModal').classList.add('hidden'));
+on($('sellerAuthModal'), 'click', e => { if(e.target === $('sellerAuthModal')) $('sellerAuthModal').classList.add('hidden'); });
+
+on($('sellerSendOtpBtn'), 'click', () => {
+  const mobile = $('sellerMobileInput').value.trim();
+  if(!/^\d{10}$/.test(mobile)){ $('sellerAuthMsg').textContent = 'Pehle sahi 10-digit mobile number daalein.'; return; }
+  sellerOtpSent = mobile;
+  $('sellerOtpRow').classList.remove('hidden');
+  $('sellerAuthMsg').textContent = `OTP ${mobile} par bhej diya gaya (demo OTP: 123456).`;
+});
+
+on($('sellerAuthForm'), 'submit', e => {
+  e.preventDefault();
+  const email = $('sellerEmailInput').value.trim().toLowerCase();
+  const mobile = $('sellerMobileInput').value.trim();
+  const otp = $('sellerOtpInput').value.trim();
+  const pincode = $('sellerPincodeInput').value.trim();
+
+  if(!email){ $('sellerAuthMsg').textContent = 'Email address zaroori hai.'; return; }
+  if(!/^\d{10}$/.test(mobile)){ $('sellerAuthMsg').textContent = 'Sahi 10-digit mobile number daalein.'; return; }
+  if(sellerOtpSent !== mobile){ $('sellerAuthMsg').textContent = 'Pehle is mobile number par OTP bhejein.'; return; }
+  if(otp !== '123456'){ $('sellerAuthMsg').textContent = 'Galat OTP. Demo OTP hai: 123456'; return; }
+  if(!/^\d{6}$/.test(pincode)){ $('sellerAuthMsg').textContent = 'Sahi 6-digit pickup pincode daalein.'; return; }
+
+  sellerProfile = { email, mobile, pincode, verified:true };
+  Local.set('sellerProfile', sellerProfile);
+  sellerOtpSent = null;
+  $('sellerAuthModal').classList.add('hidden');
+  showView('sellerDashboard');
+  renderSellerDashboard();
+});
+
+on($('sellBtn'), 'click', () => {
+  if(sellerProfile && sellerProfile.verified){ showView('sellerDashboard'); renderSellerDashboard(); }
+  else openSellerAuthModal();
+});
+on($('dashBecomeSellerBtn'), 'click', openSellerAuthModal);
+
+/* ---- Add-product form ---- */
+let pendingProductImage = null; // dataURL of the uploaded photo, if any
+on($('spImageInput'), 'change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    pendingProductImage = reader.result;
+    $('spImagePreview').src = pendingProductImage;
+    $('spImagePreviewWrap').classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+});
+
+on($('sellerProductForm'), 'submit', e => {
+  e.preventDefault();
+  if(!sellerProfile || !sellerProfile.verified){ $('spMsg').textContent = 'Pehle seller account banayein.'; return; }
+  const name = $('spName').value.trim();
+  const category = $('spCategory').value;
+  const price = Number($('spPrice').value);
+  const mrpInput = $('spMrp').value;
+  const mrp = mrpInput ? Number(mrpInput) : price;
+  const description = $('spDescription').value.trim();
+  const stock = Math.max(1, Number($('spStock').value) || 10);
+
+  if(!name || !category || !price){ $('spMsg').textContent = 'Product ka naam, category aur price bharein.'; return; }
+  if(!pendingProductImage){ $('spMsg').textContent = 'Product ki ek photo upload karein.'; return; }
+
+  const product = {
+    id: 'sp_' + Date.now(),
+    name, category, price, mrp: Math.max(mrp, price),
+    brand: 'Seller: ' + sellerProfile.email.split('@')[0],
+    rating: 0, ratingCount: 0,
+    badge: 'seller',
+    stock, deliveryDays: 5,
+    variants: {}, specs: {},
+    description: description || 'Seller dwara list kiya gaya product.',
+    isSellerProduct: true,
+    sellerEmail: sellerProfile.email,
+    customImage: pendingProductImage,
+  };
+  sellerProducts.push(product);
+  Local.set('sellerProducts', sellerProducts);
+
+  $('sellerProductForm').reset();
+  $('spImagePreviewWrap').classList.add('hidden');
+  pendingProductImage = null;
+  $('spMsg').textContent = 'Product add ho gaya ✓ Ab ye site par dikhega.';
+  renderSellerDashboard();
+  renderHomeRails();
+});
+
+function renderSellerDashboard(){
+  const onboarded = !!(sellerProfile && sellerProfile.verified);
+  $('sellerNotOnboarded').classList.toggle('hidden', onboarded);
+  $('sellerOnboardedArea').classList.toggle('hidden', !onboarded);
+  if(!onboarded) return;
+
+  $('sellerProfileEmail').textContent = sellerProfile.email;
+  $('sellerProfileMobile').textContent = sellerProfile.mobile;
+  $('sellerProfilePincode').textContent = sellerProfile.pincode;
+
+  const myProducts = sellerProducts.filter(p => p.sellerEmail === sellerProfile.email);
+  $('sellerMyProductsEmpty').classList.toggle('hidden', myProducts.length>0);
+  $('sellerMyProductsList').innerHTML = myProducts.map(p => `
+    <div class="seller-product-row">
+      <img src="${p.customImage}" alt="">
+      <div>
+        <p class="spr-name">${escapeHtml(p.name)}</p>
+        <p class="spr-meta">${escapeHtml(p.category)} · ${money(p.price)} · Stock: ${p.stock}</p>
+      </div>
+    </div>
+  `).join('');
+
+  // Transactions: orders that include any of this seller's products
+  const myProductIds = new Set(myProducts.map(p => p.id));
+  const txns = orders.filter(o => o.items.some(i => myProductIds.has(i.productId)));
+  $('sellerTransactionsEmpty').classList.toggle('hidden', txns.length>0);
+  $('sellerTransactionsList').innerHTML = txns.map(o => {
+    const sellerItems = o.items.filter(i => myProductIds.has(i.productId));
+    const sellerAmount = sellerItems.reduce((a,i)=>a + i.price*i.qty, 0);
+    const statusText = o.escrowStatus === 'released' ? '🔓 Released — payment aapke account me bhej di gayi' : '🔒 Held — buyer ke delivery-token verify hone tak Dukaan ke paas';
+    return `
+      <div class="seller-txn-row">
+        <div class="stx-head">
+          <strong class="mono">${escapeHtml(o.id)}</strong>
+          <span class="mono">${money(sellerAmount)}</span>
+        </div>
+        <p class="settings-hint">${sellerItems.map(i=>escapeHtml(i.name)+' × '+i.qty).join(', ')}</p>
+        <p class="settings-hint">${statusText}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+/* =====================================================================
+   AI ASSISTANT (placeholder — real page comes later)
+   ===================================================================== */
+on($('aiAssistantBtn'), 'click', () => $('aiAssistantModal').classList.remove('hidden'));
+on($('aiCloseBtn'), 'click', () => $('aiAssistantModal').classList.add('hidden'));
+on($('aiAssistantModal'), 'click', e => { if(e.target === $('aiAssistantModal')) $('aiAssistantModal').classList.add('hidden'); });
+
+/* =====================================================================
+   INIT
+   ===================================================================== */
+renderCategoryRail();
+refreshTopbar();
+renderHomeRails();
+startDealsCountdown();
+showView('home');
+
+</script>
+</body>
+</html>
