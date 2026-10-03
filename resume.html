@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aamir Abbas — Full-Stack Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1030; --bg2:#1a1050; --ink:#f4f6ff; --mute:#b5bce0;
+  --card:rgba(255,255,255,.07); --line:rgba(255,255,255,.16);
+  --pink:#ff5fa2; --gold:#ffd24a; --mint:#4cf0c0; --sky:#5cc8ff; --violet:#a98bff;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+:root[data-theme="light"]{--bg:#eef2ff;--bg2:#ffe9f4;--ink:#1b1a3a;--mute:#53567e;--card:rgba(255,255,255,.7);--line:rgba(27,26,58,.15)}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]):not([data-theme="light"]){--bg:#eef2ff;--bg2:#ffe9f4;--ink:#1b1a3a;--mute:#53567e;--card:rgba(255,255,255,.7);--line:rgba(27,26,58,.15)}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;font-family:'Outfit',system-ui,sans-serif;color:var(--ink);line-height:1.6;
+  background:radial-gradient(1200px 700px at 15% -10%,var(--bg2),transparent 60%),radial-gradient(900px 600px at 100% 30%,rgba(255,95,162,.18),transparent 60%),var(--bg);
+  background-color:var(--bg);overflow-x:hidden}
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+main{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:0 20px 60px}
+h1,h2{font-family:'Fraunces',Georgia,serif;margin:0;letter-spacing:-.02em;line-height:1.05}
+.hero{padding:12vh 0 8vh}
+.hero h1{font-size:clamp(3rem,13vw,7rem);font-weight:800;
+  background:linear-gradient(100deg,var(--pink),var(--gold),var(--mint),var(--sky),var(--violet),var(--pink));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 10s linear infinite}
+@keyframes shift{to{background-position:300% 0}}
+.hero p{font-size:1.2rem;color:var(--mute);max-width:34ch;margin:18px 0 26px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-weight:500;backdrop-filter:blur(6px)}
+.chip:nth-child(1){border-color:var(--pink)}.chip:nth-child(2){border-color:var(--gold)}.chip:nth-child(3){border-color:var(--mint)}.chip:nth-child(4){border-color:var(--sky)}
+section{margin-top:64px}
+h2{font-size:clamp(1.8rem,5vw,2.6rem);margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;backdrop-filter:blur(8px);border-top:4px solid var(--c,var(--pink))}
+.card h3{margin:0 0 6px;font-size:1.2rem}
+.card p{margin:0;color:var(--mute)}
+.edu{display:grid;gap:14px}
+.edu .row{display:flex;gap:16px;align-items:baseline;justify-content:space-between;flex-wrap:wrap;padding:14px 0;border-bottom:1px solid var(--line)}
+.edu b{font-size:1.1rem}.edu span{color:var(--mute)}
+.edu em{font-style:normal;font-weight:600;color:var(--c)}
+.skills{display:flex;flex-wrap:wrap;gap:10px}
+.skills span{padding:8px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-weight:500}
+.skills span:nth-child(5n+1){color:var(--pink)}.skills span:nth-child(5n+2){color:var(--gold)}.skills span:nth-child(5n+3){color:var(--mint)}.skills span:nth-child(5n+4){color:var(--sky)}.skills span:nth-child(5n){color:var(--violet)}
+.langs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.lang{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.lang b{display:block;font-family:'Fraunces',serif;font-size:1.4rem}
+.lang span{color:var(--mute)}
+footer{margin-top:70px;text-align:center;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){.hero h1{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="snow" aria-hidden="true"></canvas>
+<main>
+  <header class="hero">
+    <h1>Aamir Abbas</h1>
+    <p>Full-stack web developer building learning platforms, stores and AI-powered apps.</p>
+    <div class="chips"><span class="chip">BCA · IGNOU</span><span class="chip">Hindi · English</span><span class="chip">German B1</span><span class="chip">Learning French at JMI</span></div>
+  </header>
+
+  <section>
+    <h2>Projects</h2>
+    <div class="grid">
+      <div class="card" style="--c:var(--pink)"><h3>NextGen</h3><p>Learning and technology platform.</p></div>
+      <div class="card" style="--c:var(--gold)"><h3>MyTube</h3><p>Video-based web application.</p></div>
+      <div class="card" style="--c:var(--mint)"><h3>Dukaan</h3><p>E-commerce online store website.</p></div>
+      <div class="card" style="--c:var(--sky)"><h3>NGI</h3><p>Multi-feature learning platform with AI, courses and language learning.</p></div>
+      <div class="card" style="--c:var(--violet)"><h3>AI web concepts</h3><p>Interactive frontend projects and AI-based application ideas.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Technical skills</h2>
+    <div class="skills">
+      <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>Python</span><span>C++</span><span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>REST APIs</span><span>Git &amp; GitHub</span><span>Responsive Web Design</span><span>Full-Stack Development</span><span>AI API Integration</span><span>Basic AI</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Education</h2>
+    <div class="edu">
+      <div class="row"><div><b>Bachelor of Computer Applications</b><br><span>Indira Gandhi National Open University (IGNOU) — now in 3rd semester</span></div></div>
+      <div class="row"><div><b>Class 12 — UP Board</b></div><em style="--c:var(--mint)">70.66%</em></div>
+      <div class="row"><div><b>Class 10 — UP Board</b></div><em style="--c:var(--gold)">63%</em></div>
+      <div class="row"><div><b>French course</b><br><span>Jamia Millia Islamia (JMI) — currently learning</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Languages</h2>
+    <div class="langs">
+      <div class="lang"><b>Hindi</b><span>Native</span></div>
+      <div class="lang"><b>English</b><span>Working proficiency</span></div>
+      <div class="lang"><b>German</b><span>B1</span></div>
+      <div class="lang"><b>French</b><span>Learning at JMI</span></div>
+    </div>
+  </section>
+
+  <footer>© Aamir Abbas</footer>
+</main>
+
+<script>
+(function(){
+  var c=document.getElementById('snow'),x=c.getContext('2d'),W,H,flakes=[];
+  var cols=['#ff5fa2','#ffd24a','#4cf0c0','#5cc8ff','#a98bff','#ff8a4c','#ffffff'];
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){W=c.width=innerWidth;H=c.height=innerHeight}
+  function make(top){return{x:Math.random()*W,y:top?-10:Math.random()*H,r:Math.random()*3.5+1.2,s:Math.random()*1+.5,d:Math.random()*Math.PI*2,k:Math.random()*.02+.01,c:cols[Math.floor(Math.random()*cols.length)]}}
+  size();addEventListener('resize',size);
+  var n=Math.min(140,Math.floor(innerWidth/8));
+  for(var i=0;i<n;i++)flakes.push(make(false));
+  function draw(){
+    x.clearRect(0,0,W,H);
+    for(var i=0;i<flakes.length;i++){
+      var f=flakes[i];
+      x.beginPath();x.fillStyle=f.c;x.globalAlpha=.85;x.shadowColor=f.c;x.shadowBlur=8;
+      x.arc(f.x,f.y,f.r,0,6.283);x.fill();
+      if(!reduce){f.d+=f.k;f.y+=f.s+f.r*.15;f.x+=Math.sin(f.d)*.8;
+        if(f.y>H+10||f.x>W+10||f.x<-10)flakes[i]=make(true);}
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
