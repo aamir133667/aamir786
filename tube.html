@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Fireworks</title><link rel="stylesheet" href="style.css">
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:black;
+overflow:hidden;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Arial,sans-serif;
+}
+
+#canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+}
+
+.gift-card{
+position:relative;
+z-index:10;
+text-align:center;
+color:white;
+padding:40px;
+border-radius:20px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(10px);
+box-shadow:0 0 30px rgba(255,255,255,0.2);
+}
+
+.gift-card h1{
+margin-top:10px;
+margin-bottom:10px;
+}
+
+.gift-card p{
+opacity:0.8;
+font-size:18px;
+}
+</style>
+</head><body><canvas id="canvas"></canvas>
+
+<div class="gift-card">
+    🎁
+    <h1></h1>.
+    <p>Click anywhere!</p>
+    <div><script src="script.js"></script></body>
+    <script>
+    const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener("resize",()=>{
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+});
+
+let fireworks = [];
+
+document.addEventListener("click",(e)=>{
+
+for(let i=0;i<80;i++){
+
+    fireworks.push({
+
+        x:e.clientX,
+        y:e.clientY,
+
+        dx:(Math.random()-0.5)*12,
+        dy:(Math.random()-0.5)*12,
+
+        size:Math.random()*5+2,
+
+        color:`hsl(${Math.random()*360},100%,50%)`,
+
+        life:100
+
+    });
+
+}
+
+});
+
+function animate(){
+
+ctx.fillStyle="rgba(0,0,0,0.15)";
+ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+);
+
+for(let i=fireworks.length-1;i>=0;i--){
+
+    let p = fireworks[i];
+
+    ctx.beginPath();
+    ctx.fillStyle=p.color;
+    ctx.shadowBlur=20;
+    ctx.shadowColor=p.color;
+
+    ctx.arc(
+        p.x,
+        p.y,
+        p.size,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    p.x += p.dx;
+    p.y += p.dy;
+
+    p.dy += 0.05;
+
+    p.life--;
+
+    if(p.life<=0){
+        fireworks.splice(i,1);
+    }
+
+}
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+    </script>
+    </html>
