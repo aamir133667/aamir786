@@ -5,7 +5,7 @@ window.PROFILE = {
   education: "BCA",
   roles: ["Web Developer","Python Programmer","C++ Programmer","AI Explorer","Full Stack Learner","Language Learner","Future AI Engineer"],
   links: {
-    GitHub: "https://github.com/aamirabbas133667",
+    GitHub: "https://github.com/aamir133667",
     LinkedIn: "https://www.linkedin.com/search/results/people/?keywords=Aamir%20Abbas",
     Instagram: "https://instagram.com/aamir.86043",
     Email: "mailto:aamirabbas133667@gmail.com",
