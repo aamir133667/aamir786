@@ -10,7 +10,8 @@ window.PROFILE = {
     Instagram: "https://instagram.com/aamir.86043",
     Email: "mailto:aamirabbas133667@gmail.com",
     Portfolio: "index.html",
-    Resume: "resume.html"
+    Resume: "resume.html",
+    AI:"https://aamir86043.github.io/Abbas/"
   },
   marquee: ["WEB DEVELOPMENT","PYTHON","C++","JAVASCRIPT","NODE.JS","AI","ROBOTICS","FRENCH","GERMAN","FULL STACK","GENERATIVE AI"],
   stats: [{n:5,s:"+",l:"Projects"},{n:10,s:"+",l:"Technologies"},{n:4,s:"",l:"Languages"},{n:"∞",s:"",l:"Learning"}],
